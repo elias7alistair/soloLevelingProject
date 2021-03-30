@@ -1,12 +1,17 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import AddTask from "../components/AddTask/AddTask";
-import MainHud from "../components/CardComponents/MainHud";
-import ResourcesTab from "../components/CardComponents/ResourcesTab";
-import FilterTask from "../components/FilterTask/FilterTask";
-import TaskTab from "../components/TaskTab/TaskTab";
+import AddTask from "../../components/AddTask/AddTask";
+import MainHud from "../../components/CardComponents/MainHud";
+import ResourcesTab from "../../components/CardComponents/ResourcesTab";
+import FilterTask from "../../components/FilterTask/FilterTask";
+import TaskTab from "../../components/TaskTab/TaskTab";
+import { useSelector } from "react-redux";
 
 const MainPage = () => {
+  const { tasks } = useSelector((state) => state.tasks);
+
+  console.log(tasks);
+
   return (
     <Row>
       <Col md={8}>

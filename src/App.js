@@ -1,8 +1,9 @@
 import "./App.scss";
 import "./components/CardComponents/Card.scss";
 import ParticlesJs from "./components/particlesJs/ParticlesJs";
-import MainPage from "./Pages/MainPage";
+
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import MainPage from "./Pages/MainPage/MainPage";
 
 function App() {
   return (
