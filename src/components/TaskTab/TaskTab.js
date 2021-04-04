@@ -5,12 +5,12 @@ import deleteIcon from "../../Assets/images/delete.svg";
 import taskDone from "../../Assets/images/done.svg";
 import styled from "styled-components";
 
-const TaskTab = () => {
+const TaskTab = ({ id, taskName, priority, difficulty }) => {
   return (
     <TaskCard className='task'>
       <MainColumn>
         {" "}
-        <Title>Learn React js</Title>
+        <Title>{taskName}</Title>
         <div>
           <Image className='tasktab__image' src={editIcon} />
           <Image className='tasktab__image' src={deleteIcon} />
@@ -24,7 +24,14 @@ const TaskTab = () => {
           typeface without relying on meaningful content. Lorem ipsum may be
           used as a placeholder before final cop
         </Description>
-        <span>See more</span>
+        <Date>
+          <strong>Priority: </strong>
+          {priority}
+        </Date>{" "}
+        <Date>
+          <strong>Difficulty: </strong>
+          {difficulty}
+        </Date>
         <Date>complete by 12/2/2020</Date>
       </SubColumn>
     </TaskCard>
@@ -85,4 +92,7 @@ const Description = styled.p`
 const Date = styled.p`
   color: hsla(0, 0%, 80.4%, 0.4235294117647059);
   font-size: 13px;
+  & strong {
+    color: hsla(0, 0%, 190.4%, 0.4235294117647059);
+  }
 `;

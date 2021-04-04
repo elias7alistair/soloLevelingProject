@@ -1,5 +1,5 @@
-import React from "react";
-import { Col, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Col, Row, Button } from "react-bootstrap";
 import AddTask from "../../components/AddTask/AddTask";
 import MainHud from "../../components/CardComponents/MainHud";
 import ResourcesTab from "../../components/CardComponents/ResourcesTab";
@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 
 const MainPage = () => {
   const { tasks } = useSelector((state) => state.tasks);
+  const [addTab, setAddTab] = useState(false);
 
   console.log(tasks);
 
@@ -17,15 +18,43 @@ const MainPage = () => {
       <Col md={8}>
         {" "}
         <MainHud />
-        <FilterTask />
+        <Col
+          md={8}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <FilterTask />
+          <Button
+            variant={addTab ? "danger" : "success"}
+            onClick={() => {
+              setAddTab(!addTab);
+            }}
+            style={{ width: "25%" }}
+          >
+            {!addTab ? "Add Quest" : "Cancel"}
+          </Button>
+        </Col>
         <Row>
           <Col md={8}>
-            <TaskTab />
-            <TaskTab />
-            <TaskTab />
-            <TaskTab />
-            <TaskTab />
-            {/* <AddTask /> */}
+            {addTab ? (
+              <AddTask />
+            ) : (
+              tasks &&
+              tasks.map(({ id, taskName, priority, difficulty }) => {
+                return (
+                  <TaskTab
+                    key={id}
+                    id={id}
+                    taskName={taskName}
+                    priority={priority}
+                    difficulty={difficulty}
+                  />
+                );
+              })
+            )}
           </Col>
           <Col md={4}>
             {" "}

@@ -6,8 +6,8 @@ const AddTask = () => {
   return (
     <AddCard>
       <Row>
-        <h2>Add New Task</h2>
-        <TextInput placeholder='Enter Task'></TextInput>
+        <h2>Add New Quest</h2>
+        <TextInput placeholder='Enter Quest'></TextInput>
 
         <TextInput placeholder='Complete By'></TextInput>
 
