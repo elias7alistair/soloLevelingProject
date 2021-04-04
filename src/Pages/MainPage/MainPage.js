@@ -40,7 +40,7 @@ const MainPage = () => {
         <Row>
           <Col md={8}>
             {addTab ? (
-              <AddTask />
+              <AddTask setAddTab={setAddTab} />
             ) : (
               tasks &&
               tasks.map(({ id, taskName, priority, difficulty }) => {

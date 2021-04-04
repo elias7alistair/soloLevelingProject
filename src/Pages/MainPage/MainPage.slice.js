@@ -20,9 +20,12 @@ const taskSlice = createSlice({
     getTasks(state) {
       return state;
     },
+    addTask(state, action) {
+      state.tasks = [...state.tasks, action.payload];
+    },
   },
 });
 
-export const { getTasks } = taskSlice.actions;
+export const { getTasks, addTask } = taskSlice.actions;
 
 export default taskSlice.reducer;
