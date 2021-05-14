@@ -1,11 +1,14 @@
 import React from "react";
-
+import { useDispatch } from "react-redux";
 import editIcon from "../../Assets/images/pencil.svg";
 import deleteIcon from "../../Assets/images/delete.svg";
 import taskDone from "../../Assets/images/done.svg";
 import styled from "styled-components";
+import { removeTask, updateTasks } from "../../Pages/MainPage/MainPage.slice";
 
 const TaskTab = ({ id, taskName, priority, difficulty }) => {
+  const dispatch = useDispatch();
+
   return (
     <TaskCard className='task'>
       <MainColumn>
@@ -13,8 +16,16 @@ const TaskTab = ({ id, taskName, priority, difficulty }) => {
         <Title>{taskName}</Title>
         <div>
           <Image className='tasktab__image' src={editIcon} />
-          <Image className='tasktab__image' src={deleteIcon} />
-          <Image className='tasktab__image' src={taskDone} />
+          <Image
+            className='tasktab__image'
+            src={deleteIcon}
+            onClick={() => dispatch(removeTask(id))}
+          />
+          <Image
+            className='tasktab__image'
+            src={taskDone}
+            onClick={() => dispatch(updateTasks(id))}
+          />
         </div>
       </MainColumn>
       <SubColumn>
