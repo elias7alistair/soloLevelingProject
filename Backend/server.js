@@ -17,11 +17,11 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
+app.use("/api/stats", statsRoutes);
 app.use("/api/quests", questRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/stats", statsRoutes);
 
-app.use(notFound);
+//app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

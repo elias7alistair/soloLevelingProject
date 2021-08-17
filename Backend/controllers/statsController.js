@@ -1,4 +1,5 @@
 import Stats from "../models/statsModel.js"
+import asyncHandler from "express-async-handler";
 
 // get all stats
 const getStats = asyncHandler(async (req, res) => {
