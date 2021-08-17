@@ -1,0 +1,15 @@
+Task model
+Add task name, description, difficulty, complete by, priority,filter
+Read
+Update task name, description, difficulty, complete by, priority
+Delete
+
+user model
+user name 
+level, exp
+
+signup user
+login user
+get user 
+
+admin
