@@ -10,6 +10,8 @@ const initialState = {
   userInfo: userInfoFromStorage || false,
   loginLoading: false,
   loginErrors: false,
+  registerLoading: false,
+  registerErrors: false,
 };
 
 console.log(userInfoFromStorage, "hehe");
@@ -30,6 +32,19 @@ const inputSlice = createSlice({
       state.loginLoading = false;
       state.loginErrors = action.payload;
     },
+    userRegisterRequest: (state, action) => {
+      state.RegisterLoading = true;
+    },
+    userRegisterSuccess: (state, action) => {
+      state.RegisterLoading = false;
+      state.userInfo = action.payload;
+      state.RegisterErrors = false;
+    },
+    userRegisterError: (state, action) => {
+      state.RegisterLoading = false;
+      state.RegisterErrors = action.payload;
+    },
+
     userLogout: (state) => {
       state.userInfo = false;
     },
@@ -40,6 +55,9 @@ export const {
   userLoginRequest,
   userLoginSuccess,
   userLoginError,
+  userRegisterRequest,
+  userRegisterSuccess,
+  userRegisterError,
   userLogout,
 } = inputSlice.actions;
 
@@ -64,6 +82,34 @@ export const login = ({ name, password }) => {
     } catch (error) {
       dispatch(
         userLoginError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
+
+export const handleRegister = ({ name, email, password }) => {
+  return async (dispatch) => {
+    try {
+      dispatch(userRegisterRequest());
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        "/api/users/",
+        { name, email,password },
+        config
+      );
+      dispatch(userRegisterSuccess(data));
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    } catch (error) {
+      dispatch(
+        userRegisterError(
           error.response && error.response.data.message
             ? error.response.data.message
             : error.message

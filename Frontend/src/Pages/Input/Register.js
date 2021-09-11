@@ -1,34 +1,32 @@
-import { useState,useEffect } from "react";
-import { Button, Form } from "react-bootstrap";
-
+import { useState, useEffect } from "react";
+import { Alert, Button, Form } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { handleRegister } from "./input.slice";
 const Register = () => {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
-
-  // const redirect = location.search ? location.search.split('=')[1] : '/'
-
-
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     history.push(redirect)
-  //   }
-  // }, [history, userInfo, redirect])
-
+  const { registerErrors: errors } = useSelector((state) => state.input);
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
     } else {
-      console.log(name, email, password);
+      setMessage(false);
+      dispatch(handleRegister({ name, email, password }));
     }
   };
 
   return (
     <>
       <h2>Sign Up</h2>
+      {(message || errors) && (
+        <Alert variant={`danger`}>{message || errors}</Alert>
+      )}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="name">
           <Form.Label>Name</Form.Label>
