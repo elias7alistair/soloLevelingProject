@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoginPage from "./LoginPage";
 import styled from "styled-components/macro";
 import Register from "./Register";
+import { useSelector } from "react-redux";
 
-const Home = () => {
+const Home = ({ location, history }) => {
+  const { userInfo } = useSelector((state) => state.input);
+
   const [isLogin, setIsLogin] = useState(true);
+  useEffect(() => {
+    if (userInfo) {
+      history.push("/main");
+    }
+  }, [history, userInfo]);
 
   return (
     <div

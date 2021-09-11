@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Row, Button } from "react-bootstrap";
 import AddTask from "../../components/AddTask/AddTask";
 import MainHud from "../../components/CardComponents/MainHud";
@@ -7,11 +7,16 @@ import FilterTask from "../../components/FilterTask/FilterTask";
 import TaskTab from "../../components/TaskTab/TaskTab";
 import { useSelector } from "react-redux";
 
-const MainPage = () => {
+const MainPage = ({ history }) => {
   const { tasks } = useSelector((state) => state.tasks);
+  const { userInfo } = useSelector((state) => state.input);
   const [addTab, setAddTab] = useState(false);
 
-  console.log(tasks);
+  useEffect(() => {
+    if (!userInfo) {
+      history.push("/");
+    }
+  }, [userInfo]);
 
   return (
     <Row>
