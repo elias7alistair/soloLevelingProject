@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const updateId = (list) => {
   list.map((data) => {
@@ -16,39 +17,67 @@ const filterTask = (list, id) => {
 };
 
 const initialState = {
-  tasks: [
-    {
-      id: 1,
-      taskName: "get up",
-      priority: "high",
-      difficulty: "medium",
-      status: "active",
-    },
-    {
-      id: 2,
-      taskName: "start learning course",
-      priority: "high",
-      difficulty: "medium",
-      status: "active",
-    },
-    {
-      id: 3,
-      taskName: "read",
-      priority: "high",
-      difficulty: "medium",
-      status: "active",
-    },
-  ],
+  tasks: [],
+  taskLoading: false,
+  errors: false,
 };
+// const initialState = {
+//   tasks: [
+//     {
+//       id: 1,
+//       taskName: "get up",
+//       priority: "high",
+//       difficulty: "medium",
+//       status: "active",
+//     },
+//     {
+//       id: 2,
+//       taskName: "start learning course",
+//       priority: "high",
+//       difficulty: "medium",
+//       status: "active",
+//     },
+//     {
+//       id: 3,
+//       taskName: "read",
+//       priority: "high",
+//       difficulty: "medium",
+//       status: "active",
+//     },
+//   ],
+// };
 
 const taskSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    addTask(state, action) {
-      state.tasks = updateId([...state.tasks, action.payload]);
-      console.log(action.payload);
+    requestGetTask(state) {
+      state.taskLoading = true;
     },
+    getTaskSuccess(state, action) {
+      state.taskLoading = false;
+      state.task = action.payload;
+    },
+    getTaskFailed(state, action) {
+      state.taskLoading = false;
+      state.errors = action.payload;
+    },
+    requestAddTask(state) {
+      state.taskLoading = true;
+    },
+    addTaskSuccess(state, action) {
+      state.taskLoading = false;
+      state.tasks = updateId([...state.tasks, action.payload]);
+      //  console.log(action.payload);
+    },
+    addTaskFailed(state, action) {
+      state.taskLoading = false;
+      state.errors = action.payload;
+    },
+    // addTask(state, action) {
+    //   state.tasks = updateId([...state.tasks, action.payload]);
+    //   console.log(action.payload);
+    // },
     removeTask(state, action) {
       state.tasks = updateId(filterTask([...state.tasks], action.payload));
     },
@@ -64,21 +93,72 @@ const taskSlice = createSlice({
   },
 });
 
-export const { getTasks, addTask, removeTask, updateTasks } = taskSlice.actions;
+export const {
+  removeTask,
+  updateTasks,
+  requestGetTask,
+  getTaskSuccess,
+  getTaskFailed,
+  addTaskFailed,
+  requestAddTask,
+  addTaskSuccess,
+} = taskSlice.actions;
 
 export default taskSlice.reducer;
 
-// export const updateStatusCompleted = (id) => {
-//   return async (dispatch, getState) => {
-//     const { tasks } = getState().tasks;
+export const getTasks = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(requestGetTask);
+      const {
+        input: { userInfo },
+      } = getState();
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.get(`/api/quests/myquests`, config);
+      dispatch(getTaskSuccess(data));
+    } catch (error) {
+      dispatch(
+        getTaskFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
 
-//     const tempArray = [...tasks];
+export const addTask = (task) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(requestAddTask());
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-//     const tempArray2 = tempArray.map((data) => {
-//       if (data.id === id) {
-//         data.status = "completed";
-//       }
-//     });
-//     dispatch(updateTasks(tempArray2));
-//   };
-// };
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(`/api/quests/`, task, config);
+
+      dispatch(addTaskSuccess(data));
+    } catch (error) {
+      dispatch(
+        addTaskFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};

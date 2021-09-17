@@ -6,11 +6,23 @@ import ResourcesTab from "../../components/CardComponents/ResourcesTab";
 import FilterTask from "../../components/FilterTask/FilterTask";
 import TaskTab from "../../components/TaskTab/TaskTab";
 import { useSelector } from "react-redux";
+import { getTasks } from "./MainPage.slice";
+import { useDispatch } from "react-redux";
 
 const MainPage = ({ history }) => {
-  const { tasks } = useSelector((state) => state.tasks);
+  const dispatch = useDispatch();
+
+  const {
+    tasks,
+    taskLoading: loading,
+    errors,
+  } = useSelector((state) => state.tasks);
   const { userInfo } = useSelector((state) => state.input);
   const [addTab, setAddTab] = useState(false);
+
+  useEffect(() => {
+    dispatch(getTasks());
+  }, [tasks]);
 
   useEffect(() => {
     if (!userInfo) {
@@ -46,8 +58,11 @@ const MainPage = ({ history }) => {
           <Col md={8}>
             {addTab ? (
               <AddTask setAddTab={setAddTab} />
+            ) : loading ? (
+              <h2>loading....</h2>
+            ) : tasks.length < 1 ? (
+              <h2>Please Add tasks</h2>
             ) : (
-              tasks &&
               tasks.map(({ id, taskName, priority, difficulty }) => {
                 return (
                   <TaskTab
