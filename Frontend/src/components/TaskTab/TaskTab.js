@@ -6,7 +6,7 @@ import taskDone from "../../Assets/images/done.svg";
 import styled from "styled-components";
 import { removeTask, updateTasks } from "../../Pages/MainPage/MainPage.slice";
 
-const TaskTab = ({ id, taskName, priority, difficulty }) => {
+const TaskTab = ({ id, taskName, priority, difficulty,completeBy }) => {
   const dispatch = useDispatch();
 
   return (
@@ -43,7 +43,7 @@ const TaskTab = ({ id, taskName, priority, difficulty }) => {
           <strong>Difficulty: </strong>
           {difficulty}
         </Date>
-        <Date>complete by 12/2/2020</Date>
+        <Date>{completeBy}</Date>
       </SubColumn>
     </TaskCard>
   );

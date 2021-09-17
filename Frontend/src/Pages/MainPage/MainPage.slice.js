@@ -56,7 +56,7 @@ const taskSlice = createSlice({
     },
     getTaskSuccess(state, action) {
       state.taskLoading = false;
-      state.task = action.payload;
+      state.tasks = action.payload;
     },
     getTaskFailed(state, action) {
       state.taskLoading = false;
@@ -119,7 +119,7 @@ export const getTasks = () => {
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.get(`/api/quests/myquests`, config);
+      const { data } = await axios.get(`/api/quests/myquests`,config);
       dispatch(getTaskSuccess(data));
     } catch (error) {
       dispatch(
@@ -138,7 +138,7 @@ export const addTask = (task) => {
     try {
       dispatch(requestAddTask());
       const {
-        userLogin: { userInfo },
+        input: { userInfo },
       } = getState();
 
       const config = {
@@ -148,7 +148,7 @@ export const addTask = (task) => {
         },
       };
 
-      const { data } = await axios.post(`/api/quests/`, task, config);
+      const { data } = await axios.post(`/api/quests`, task, config);
 
       dispatch(addTaskSuccess(data));
     } catch (error) {

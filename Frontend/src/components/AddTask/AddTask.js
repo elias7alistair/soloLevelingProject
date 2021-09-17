@@ -33,11 +33,12 @@ const AddTask = ({ setAddTab }) => {
       console.log(quest, date, difficulty, priority);
       dispatch(
         addTask({
-          id: -1,
-          taskName: quest,
+          name: quest,
           priority: priority,
           difficulty: difficulty,
-          status: "active",
+          // status: "active",
+          // description: description,
+            completeBy:date
         })
       );
 
