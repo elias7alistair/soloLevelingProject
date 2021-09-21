@@ -4,25 +4,25 @@ import editIcon from "../../Assets/images/pencil.svg";
 import deleteIcon from "../../Assets/images/delete.svg";
 import taskDone from "../../Assets/images/done.svg";
 import styled from "styled-components";
-import { removeTask, updateTasks } from "../../Pages/MainPage/MainPage.slice";
+import { deleteTask, removeTask, updateTasks } from "../../Pages/MainPage/MainPage.slice";
 
-const TaskTab = ({ id, taskName, priority, difficulty,completeBy }) => {
+const TaskTab = ({ id, taskName, priority, difficulty, completeBy }) => {
   const dispatch = useDispatch();
 
   return (
-    <TaskCard className='task'>
+    <TaskCard className="task">
       <MainColumn>
         {" "}
         <Title>{taskName}</Title>
         <div>
-          <Image className='tasktab__image' src={editIcon} />
+          <Image className="tasktab__image" src={editIcon} />
           <Image
-            className='tasktab__image'
+            className="tasktab__image"
             src={deleteIcon}
-            onClick={() => dispatch(removeTask(id))}
+            onClick={() => dispatch(deleteTask({ id: id }))}
           />
           <Image
-            className='tasktab__image'
+            className="tasktab__image"
             src={taskDone}
             onClick={() => dispatch(updateTasks(id))}
           />

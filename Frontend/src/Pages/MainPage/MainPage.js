@@ -19,7 +19,7 @@ const MainPage = ({ history }) => {
   } = useSelector((state) => state.tasks);
   const { userInfo } = useSelector((state) => state.input);
   const [addTab, setAddTab] = useState(false);
-  console.log(tasks,"geeg")
+  console.log(tasks, "geeg");
   useEffect(() => {
     dispatch(getTasks());
   }, []);
@@ -63,11 +63,12 @@ const MainPage = ({ history }) => {
             ) : tasks.length < 1 ? (
               <h2>Please Add tasks</h2>
             ) : (
-              tasks.map(({ id, name, priority, difficulty,completeBy }) => {
+              tasks?.map(({ _id, name, priority, difficulty, completeBy }) => {
+                
                 return (
                   <TaskTab
-                    key={id}
-                    id={id}
+                    key={_id}
+                    id={_id}
                     taskName={name}
                     priority={priority}
                     difficulty={difficulty}

@@ -62,6 +62,17 @@ const taskSlice = createSlice({
       state.taskLoading = false;
       state.errors = action.payload;
     },
+    requestDeleteTask(state) {
+      state.taskLoading = true;
+    },
+    deleteTaskSuccess(state, action) {
+      state.taskLoading = false;
+       state.tasks = action.payload;
+    },
+    deleteTaskFailed(state, action) {
+      state.taskLoading = false;
+      state.errors = action.payload;
+    },
     requestAddTask(state) {
       state.taskLoading = true;
     },
@@ -99,6 +110,9 @@ export const {
   requestGetTask,
   getTaskSuccess,
   getTaskFailed,
+  requestDeleteTask,
+  deleteTaskSuccess,
+  deleteTaskFailed,
   addTaskFailed,
   requestAddTask,
   addTaskSuccess,
@@ -133,6 +147,35 @@ export const getTasks = () => {
   };
 };
 
+export const deleteTask = ({id}) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(requestDeleteTask());
+      const {
+        input: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.delete(`/api/quests/${id}`, config);
+
+      dispatch(deleteTaskSuccess(data));
+    } catch (error) {
+      dispatch(
+        deleteTaskFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
 export const addTask = (task) => {
   return async (dispatch, getState) => {
     try {
