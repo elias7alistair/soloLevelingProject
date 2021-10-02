@@ -62,12 +62,30 @@ const taskSlice = createSlice({
       state.taskLoading = false;
       state.errors = action.payload;
     },
+    requestTaskStatus(state) {
+      state.taskLoading = true;
+    },
+    taskStatusSuccess(state, action) {
+      state.taskLoading = false;
+      console.log('hehehags123',action.payload)
+      const newTasks = state.tasks.map((data) => {
+        if (data._id === action.payload._id) {
+          data.isCompleted = action.payload.isCompleted;
+        }
+        return data;
+      });
+      state.tasks = [...newTasks];
+    },
+    taskStatusFailed(state, action) {
+      state.taskLoading = false;
+      state.errors = action.payload;
+    },
     requestDeleteTask(state) {
       state.taskLoading = true;
     },
     deleteTaskSuccess(state, action) {
       state.taskLoading = false;
-       state.tasks = action.payload;
+      state.tasks = action.payload;
     },
     deleteTaskFailed(state, action) {
       state.taskLoading = false;
@@ -105,6 +123,9 @@ const taskSlice = createSlice({
 });
 
 export const {
+  requestTaskStatus,
+  taskStatusFailed,
+  taskStatusSuccess,
   removeTask,
   updateTasks,
   requestGetTask,
@@ -133,7 +154,7 @@ export const getTasks = () => {
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.get(`/api/quests/myquests`,config);
+      const { data } = await axios.get(`/api/quests/myquests`, config);
       dispatch(getTaskSuccess(data));
     } catch (error) {
       dispatch(
@@ -147,7 +168,7 @@ export const getTasks = () => {
   };
 };
 
-export const deleteTask = ({id}) => {
+export const deleteTask = ({ id }) => {
   return async (dispatch, getState) => {
     try {
       dispatch(requestDeleteTask());
@@ -168,6 +189,41 @@ export const deleteTask = ({id}) => {
     } catch (error) {
       dispatch(
         deleteTaskFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
+
+export const updateQuestStatus = ({ id }) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(requestTaskStatus());
+      console.log("adsg324");
+      const {
+        input: { userInfo },
+      } = getState();
+      console.log(userInfo, "adsg32");
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/quests/${id}`,
+        {},
+        config
+      );
+
+      dispatch(taskStatusSuccess(data));
+    } catch (error) {
+      dispatch(
+        taskStatusFailed(
           error.response && error.response.data.message
             ? error.response.data.message
             : error.message

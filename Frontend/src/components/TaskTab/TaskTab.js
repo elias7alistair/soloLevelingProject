@@ -4,9 +4,21 @@ import editIcon from "../../Assets/images/pencil.svg";
 import deleteIcon from "../../Assets/images/delete.svg";
 import taskDone from "../../Assets/images/done.svg";
 import styled from "styled-components";
-import { deleteTask, removeTask, updateTasks } from "../../Pages/MainPage/MainPage.slice";
+import {
+  deleteTask,
+  removeTask,
+  updateQuestStatus,
+  updateTasks,
+} from "../../Pages/MainPage/MainPage.slice";
 
-const TaskTab = ({ id, taskName, priority, difficulty, completeBy }) => {
+const TaskTab = ({
+  id,
+  taskName,
+  priority,
+  difficulty,
+  completeBy,
+  isCompleted,
+}) => {
   const dispatch = useDispatch();
 
   return (
@@ -22,9 +34,10 @@ const TaskTab = ({ id, taskName, priority, difficulty, completeBy }) => {
             onClick={() => dispatch(deleteTask({ id: id }))}
           />
           <Image
+            checkStatus={isCompleted || undefined}
             className="tasktab__image"
             src={taskDone}
-            onClick={() => dispatch(updateTasks(id))}
+            onClick={() => dispatch(updateQuestStatus({ id: id }))}
           />
         </div>
       </MainColumn>
@@ -80,6 +93,7 @@ const MainColumn = styled.div`
 const Title = styled.h2``;
 
 const Image = styled.img`
+  filter: ${(props) => props.checkStatus && "grayscale(100%)"};
   height: 20px;
   margin: 0 12px;
   &:hover {

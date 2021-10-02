@@ -63,10 +63,11 @@ const MainPage = ({ history }) => {
             ) : tasks.length < 1 ? (
               <h2>Please Add tasks</h2>
             ) : (
-              tasks?.map(({ _id, name, priority, difficulty, completeBy }) => {
+              tasks?.map(({ _id, name, priority, difficulty, completeBy ,isCompleted}) => {
                 
                 return (
                   <TaskTab
+                  isCompleted={isCompleted}
                     key={_id}
                     id={_id}
                     taskName={name}
