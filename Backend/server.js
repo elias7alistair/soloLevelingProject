@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
-
+import path from 'path'
 import questRoutes from "./routes/questRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 
@@ -13,13 +13,22 @@ connectDB();
 const app = express()
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
 
 app.use("/api/stats", statsRoutes);
 app.use("/api/quests", questRoutes);
 app.use("/api/users", userRoutes);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  )
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running....')
+  })
+}
 
 //app.use(notFound);
 app.use(errorHandler);
