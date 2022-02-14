@@ -6,13 +6,14 @@ import statsRoutes from "./routes/statsRoutes.js";
 import path from 'path'
 import questRoutes from "./routes/questRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
-
+import cors from "cors";
 dotenv.config();
 connectDB();
 
 const app = express()
 app.use(express.json());
 
+app.use(cors());
 
 app.use("/api/stats", statsRoutes);
 app.use("/api/quests", questRoutes);

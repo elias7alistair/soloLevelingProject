@@ -11,7 +11,7 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <ParticlesJs />
+        {/* <ParticlesJs /> */}
         <Navbar />
         <Route path="/" component={Home} exact />
         <Route path="/main" component={MainPage} exact />

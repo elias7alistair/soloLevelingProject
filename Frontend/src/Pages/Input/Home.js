@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Home = ({ location, history }) => {
   const { userInfo } = useSelector((state) => state.input);
 
-  const [isLogin, setIsLogin] = useState(true);
+  
   useEffect(() => {
     if (userInfo) {
       history.push("/main");
@@ -15,41 +15,48 @@ const Home = ({ location, history }) => {
   }, [history, userInfo]);
 
   return (
-    <div
-      css={`
-        margin: auto;
-      `}
-    >
-      <Container>
-        {isLogin ? (
-          <Tab>
-            <LoginPage />
-          </Tab>
-        ) : (
-          <Tab2
-            onMouseEnter={() => {
-              setTimeout(() => setIsLogin(true), 500);
-            }}
-          >
-            <h2>Welcome to login</h2>
-          </Tab2>
-        )}
-        {!isLogin ? (
-          <Tab>
-            <Register />
-          </Tab>
-        ) : (
-          <Tab2
-            onMouseEnter={() => {
-              setTimeout(() => setIsLogin(false), 500);
-            }}
-          >
-            <h2>Sign UP</h2>
-          </Tab2>
-        )}
-      </Container>
-    </div>
+    <Container>
+      <LoginPage />
+     
+    </Container>
   );
+
+  // return (
+  //   <div
+  //     css={`
+  //       margin: auto;
+  //     `}
+  //   >
+  //     <Container>
+  //       {isLogin ? (
+  //         <Tab>
+  //           <LoginPage />
+  //         </Tab>
+  //       ) : (
+  //         <Tab2
+  //           onMouseEnter={() => {
+  //             setTimeout(() => setIsLogin(true), 500);
+  //           }}
+  //         >
+  //           <h2>Welcome to login</h2>
+  //         </Tab2>
+  //       )}
+  //       {!isLogin ? (
+  //         <Tab>
+  //           <Register />
+  //         </Tab>
+  //       ) : (
+  //         <Tab2
+  //           onMouseEnter={() => {
+  //             setTimeout(() => setIsLogin(false), 500);
+  //           }}
+  //         >
+  //           <h2>Sign UP</h2>
+  //         </Tab2>
+  //       )}
+  //     </Container>
+  //   </div>
+  // );
 };
 
 export default Home;
@@ -61,11 +68,12 @@ const Tab = styled.div`
   height: 500px;
 `;
 const Container = styled.div`
+  height: 100%;
+  background: #f9f9f9;
+  min-height: 92vh;
   display: flex;
-  flex-direction: row;
-  color: black;
   justify-content: center;
-  margin: 60px 0;
+  align-items: center;
 `;
 const Tab2 = styled(Tab)`
   background: linear-gradient(135deg, #f75959 0%, #f35587 100%);

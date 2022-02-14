@@ -9,7 +9,9 @@ const Navbar = () => {
         css={`
           display: flex;
           justify-content: space-between;
+          background: #343d44;
           flex-direction: row;
+          padding: 10px;
         `}
       >
         <h1>Solo Leveling</h1>

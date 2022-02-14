@@ -1,5 +1,6 @@
 {
   "name": "solo",
+  "proxy": "http://localhost:5000",
   "version": "1.0.0",
   "description": "yes",
   "main": "server.js",
@@ -23,6 +24,7 @@
   "homepage": "https://github.com/elias7alistair/soloLevelingProject#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
