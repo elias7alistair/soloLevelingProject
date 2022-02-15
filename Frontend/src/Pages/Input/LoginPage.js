@@ -23,6 +23,11 @@ const LoginPage = () => {
     console.log(name, password);
   };
 
+  const demoLogin = (e) => {
+    e.preventDefault();
+    dispatch(login({ name:'alistair', password:'1234567' }));
+    console.log(name, password);
+  }
   const register = (e) => {
     e.preventDefault();
     if (registerpassword !== registerconfirmPassword) {
@@ -164,6 +169,9 @@ const LoginPage = () => {
               <Button onClick={submitHandler} className="btn w-100">
                 Login
               </Button>
+              <Button demo onClick={demoLogin} className="btn w-100">
+                Demo Login
+              </Button>
             </FormContainer>
           </div>
         </div>
@@ -179,6 +187,8 @@ const Button = styled.div`
   background-color: #6c757d;
   padding: 0.7rem 4.75rem;
   border-color: #6c757d;
+
+  ${({demo})=>demo &&`margin-top: 10px;background:#666697;`}
 `;
 const FormContainer = styled.div`
   padding: 15px;

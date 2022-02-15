@@ -6,6 +6,9 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import MainPage from "./Pages/MainPage/MainPage";
 import Home from "./Pages/Input/Home";
 import Navbar from "./components/Navbar/Navbar";
+import Axios from "axios";
+
+Axios.defaults.baseURL = "http://127.0.0.1:5000/";
 
 function App() {
   return (
