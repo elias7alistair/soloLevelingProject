@@ -14,7 +14,7 @@ const updateQuestDetails = asyncHandler(async (req, res) => {
     quest.name = req.body.name || quest.name;
     quest.priority = req.body.priority || quest.priority;
     quest.difficulty = req.body.difficulty || quest.difficulty;
-    quest.completeBy = req.body.completeBy || quest.completeBy;
+    quest.status = req.body.status || quest.status;
     quest.description = req.body.description || quest.description;
 
 
@@ -85,20 +85,20 @@ const getQuestByUser = asyncHandler(async (req, res) => {
 
 // post add quest
 const addQuest = asyncHandler(async (req, res) => {
-  const { name, description, priority, difficulty, completeBy } = req.body;
+  const { name, description, priority, difficulty, status } = req.body;
 
   //const exists = await Quest.find({ name, user: req.user._id })
   console.log(name, req.user._id);
   const exists = await Quest.find({ name, user: req.user._id });
   console.log("exists", exists);
 
-  if (exists.length < 1 && name && priority && difficulty && completeBy) {
+  if (exists.length < 1 && name && priority && difficulty && status) {
     const quest = new Quest({
       name,
       description,
       priority,
       difficulty,
-      completeBy,
+      status,
       user: req.user._id,
     });
     const createQuest = await quest.save();

@@ -8,6 +8,8 @@ import TaskTab from "../../components/TaskTab/TaskTab";
 import { useSelector } from "react-redux";
 import { getTasks } from "./MainPage.slice";
 import { useDispatch } from "react-redux";
+import styled from 'styled-components'
+import TaskContainer from "../../components/TaskContainer";
 
 const MainPage = ({ history }) => {
   const dispatch = useDispatch();
@@ -31,7 +33,15 @@ const MainPage = ({ history }) => {
   }, [userInfo]);
 
   return (
-    <Row>
+    <Row className='p-2'>
+      <Col md={12} lg={8}>
+        <MainHud />
+        <MainBody className='d-flex'>
+          <TaskContainer title={`To Do`}/>
+          <TaskContainer title={`In Progress`}/>
+          <TaskContainer title={`Completed`}/>
+        </MainBody>
+      </Col>
       <Col md={8}>
         {" "}
         <MainHud />
@@ -63,20 +73,28 @@ const MainPage = ({ history }) => {
             ) : tasks.length < 1 ? (
               <h2>Please Add tasks</h2>
             ) : (
-              tasks?.map(({ _id, name, priority, difficulty, completeBy ,isCompleted}) => {
-                
-                return (
-                  <TaskTab
-                  isCompleted={isCompleted}
-                    key={_id}
-                    id={_id}
-                    taskName={name}
-                    priority={priority}
-                    difficulty={difficulty}
-                    completeBy={completeBy}
-                  />
-                );
-              })
+              tasks?.map(
+                ({
+                  _id,
+                  name,
+                  priority,
+                  difficulty,
+                  completeBy,
+                  isCompleted,
+                }) => {
+                  return (
+                    <TaskTab
+                      isCompleted={isCompleted}
+                      key={_id}
+                      id={_id}
+                      taskName={name}
+                      priority={priority}
+                      difficulty={difficulty}
+                      completeBy={completeBy}
+                    />
+                  );
+                }
+              )
             )}
           </Col>
           <Col md={4}>
@@ -93,3 +111,7 @@ const MainPage = ({ history }) => {
 };
 
 export default MainPage;
+
+const MainBody = styled.div`
+
+`

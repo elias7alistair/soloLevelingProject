@@ -27,10 +27,10 @@ const questSchema = Mongoose.Schema(
             type: String,
 
         },
-        isCompleted: {
-            type: Boolean,
+        status: {
+            type: String,
             required: true,
-            default: false
+            default: 0
         }
 
     }, {

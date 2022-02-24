@@ -38,7 +38,7 @@ const AddTask = ({ setAddTab }) => {
           difficulty: difficulty,
           // status: "active",
           // description: description,
-            completeBy:date
+            status:date
         })
       );
 
