@@ -5,14 +5,14 @@ import { HiOutlinePencil } from "react-icons/hi";
 import { AiOutlinePlus } from "react-icons/ai";
 import { Col, Row } from "react-bootstrap";
 import { Draggable, Droppable } from "react-drag-and-drop";
-function TaskContainer({ title }) {
-  const onDrop = (data) => {
-    console.log(data,title);
-  };
-
+function TaskContainer({ title, id, onDrop, tasks }) {
+  // const onDrop = (data) => {
+  //   console.log(data,title);
+  // };
+  console.log(tasks,title);
   return (
-    <Container>
-      <Droppable  types={['fruit']}  onDrop={(data,title)=>onDrop(data,title)}>
+    <Droppable types={["task"]} onDrop={(data) => onDrop({ data, id })}>
+        <Container>
         <Header className="d-flex justify-content-between">
           <Title>{title}</Title>
           <a>
@@ -20,7 +20,21 @@ function TaskContainer({ title }) {
           </a>
         </Header>
         <Body>
-          <Draggable type="fruit"  data={`${title}_1`}>
+          {tasks?.length > 0 && tasks?.map((task) => (
+            <Draggable type="task" data={JSON.stringify({...task})} >
+              <TaskCard>
+                <Row>
+                  <Col md={10}>{task.name}</Col>
+                  <Col md={2}>
+                    <a className={"task-card_edit"}>
+                      <HiOutlinePencil />
+                    </a>
+                  </Col>
+                </Row>
+              </TaskCard>
+            </Draggable>
+          ))}
+          {/* <Draggable type="task" data={`${title}_1`}>
             <TaskCard>
               <Row>
                 <Col md={10}>lorea ae rae aer esfasjfsdoaf sdf</Col>
@@ -32,7 +46,7 @@ function TaskContainer({ title }) {
               </Row>
             </TaskCard>
           </Draggable>
-          <Draggable type="fruit" data={`${title}_2`}>
+          <Draggable type="task" data={`${title}_2`}>
             <TaskCard>
               <Row>
                 <Col md={10}>lorea ae rae aer esfasjfsdoaf sdf</Col>
@@ -44,17 +58,17 @@ function TaskContainer({ title }) {
               </Row>
             </TaskCard>
           </Draggable>{" "}
-          <Draggable type="fruit" data={`${title}_3`}>
+          <Draggable type="task" data={`${title}_3`}>
             <AddTask>
               <a>
                 <AiOutlinePlus />
               </a>{" "}
               <span>Add Quest</span>
             </AddTask>
-          </Draggable>
+          </Draggable> */}
         </Body>
-      </Droppable>
     </Container>
+      </Droppable>
   );
 }
 

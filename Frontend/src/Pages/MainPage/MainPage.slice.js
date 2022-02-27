@@ -198,6 +198,43 @@ export const deleteTask = ({ id }) => {
   };
 };
 
+export const updateTaskDetails = (task) => {
+  return async (dispatch, getState) => {
+    console.log(task)
+    try {
+      dispatch(requestTaskStatus());
+     
+      const {
+        input: { userInfo },
+      } = getState();
+     
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/quests//updateQuest/${task._id}`,
+        {...task},
+        config
+      );
+
+      dispatch(taskStatusSuccess(data));
+      dispatch(getTasks());
+    } catch (error) {
+      console.log(error)
+      dispatch(
+        taskStatusFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
 export const updateQuestStatus = ({ id }) => {
   return async (dispatch, getState) => {
     try {

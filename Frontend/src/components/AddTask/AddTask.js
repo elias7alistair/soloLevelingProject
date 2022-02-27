@@ -36,9 +36,10 @@ const AddTask = ({ setAddTab }) => {
           name: quest,
           priority: priority,
           difficulty: difficulty,
+          completeBy: date,
           // status: "active",
           // description: description,
-            status:date
+            status:"0"
         })
       );
 
