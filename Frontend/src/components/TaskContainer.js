@@ -5,7 +5,7 @@ import { HiOutlinePencil } from "react-icons/hi";
 import { AiOutlinePlus } from "react-icons/ai";
 import { Col, Row } from "react-bootstrap";
 import { Draggable, Droppable } from "react-drag-and-drop";
-function TaskContainer({ title, id, onDrop, tasks, width }) {
+function TaskContainer({ title, id, onDrop, tasks, width,addTab }) {
   // const onDrop = (data) => {
   //   console.log(data,title);
   // };
@@ -71,6 +71,12 @@ function TaskContainer({ title, id, onDrop, tasks, width }) {
               <span>Add Quest</span>
             </AddTask>
           </Draggable> */}
+             <AddTask onClick={addTab}>
+              <a>
+                <AiOutlinePlus />
+              </a>{" "}
+              <span>Add Quest</span>
+            </AddTask>
         </Body>
       </Container>
     </Droppable>

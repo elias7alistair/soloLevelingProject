@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import TaskContainer from "../../components/TaskContainer";
 import { ToggleButton } from "../Input/LoginPage";
+import AddTaskModal from "../../components/AddTask/AddTaskModal";
 
 const containers = [
   { label: "To Do", id: "0" },
@@ -94,38 +95,36 @@ const MainPage = ({ history }) => {
           Priority
         </ToggleButton>
         <MainBody className="d-flex flex-column">
-         
-          
-              {toggle === 0 ? (
-               <div className="d-flex flex-row">
-                  {containers.map(({ label, id }) => (
-                    <TaskContainer
-                      onDrop={onDrop}
-                      tasks={sortedTasks[id]}
-                      title={label}
-                      id={id}
-                    />
-                  ))}
-                   </div>
-              ) : (
-              
-                   <div className="d-flex flex-wrap flex-row justify-content-between">
-                  {" "}
-                  {priority.map(({ label, id }) => (
-                    <TaskContainer
-                      width={"50%"}
-                      onDrop={onDrop}
-                      tasks={sortedTasks[id]}
-                      title={label}
-                      id={id}
-                    />
-                  ))}
-                </div>
-              )}
-       
-        
+          {toggle === 0 ? (
+            <div className="d-flex flex-row">
+              {containers.map(({ label, id }) => (
+                <TaskContainer
+                  onDrop={onDrop}
+                  tasks={sortedTasks[id]}
+                  title={label}
+                  id={id}
+                  addTab={() => setAddTab(true)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="d-flex flex-wrap flex-row justify-content-between">
+              {" "}
+              {priority.map(({ label, id }) => (
+                <TaskContainer
+                  width={"50%"}
+                  onDrop={onDrop}
+                  tasks={sortedTasks[id]}
+                  title={label}
+                  id={id}
+                  addTab={() => setAddTab(true)}
+                />
+              ))}
+            </div>
+          )}
         </MainBody>
       </Col>
+      <AddTaskModal close={() => setAddTab(false)} addTab={addTab}options={priority} />
       <Col md={8}>
         {" "}
         <MainHud />
