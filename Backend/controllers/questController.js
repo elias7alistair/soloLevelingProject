@@ -16,6 +16,7 @@ const updateQuestDetails = asyncHandler(async (req, res) => {
     quest.difficulty = req.body.difficulty || quest.difficulty;
     quest.status = req.body.status || quest.status;
     quest.description = req.body.description || quest.description;
+    quest.associatedWith = req.body.associatedWith || quest.associatedWith;
 
 
     const updateQuest = await quest.save();

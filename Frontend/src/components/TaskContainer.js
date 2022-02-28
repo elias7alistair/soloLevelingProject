@@ -5,14 +5,18 @@ import { HiOutlinePencil } from "react-icons/hi";
 import { AiOutlinePlus } from "react-icons/ai";
 import { Col, Row } from "react-bootstrap";
 import { Draggable, Droppable } from "react-drag-and-drop";
-function TaskContainer({ title, id, onDrop, tasks }) {
+function TaskContainer({ title, id, onDrop, tasks, width }) {
   // const onDrop = (data) => {
   //   console.log(data,title);
   // };
-  console.log(tasks,title);
+  console.log(tasks, title);
   return (
-    <Droppable types={["task"]} onDrop={(data) => onDrop({ data, id })}>
-        <Container>
+    <Droppable
+      style={{ width: width && width}}
+      types={["task"]}
+      onDrop={(data) => onDrop({ data, id })}
+    >
+      <Container width={width}>
         <Header className="d-flex justify-content-between">
           <Title>{title}</Title>
           <a>
@@ -20,20 +24,21 @@ function TaskContainer({ title, id, onDrop, tasks }) {
           </a>
         </Header>
         <Body>
-          {tasks?.length > 0 && tasks?.map((task) => (
-            <Draggable type="task" data={JSON.stringify({...task})} >
-              <TaskCard>
-                <Row>
-                  <Col md={10}>{task.name}</Col>
-                  <Col md={2}>
-                    <a className={"task-card_edit"}>
-                      <HiOutlinePencil />
-                    </a>
-                  </Col>
-                </Row>
-              </TaskCard>
-            </Draggable>
-          ))}
+          {tasks?.length > 0 &&
+            tasks?.map((task) => (
+              <Draggable type="task" data={JSON.stringify({ ...task })}>
+                <TaskCard>
+                  <Row>
+                    <Col md={10}>{task.name}</Col>
+                    <Col md={2}>
+                      <a className={"task-card_edit"}>
+                        <HiOutlinePencil />
+                      </a>
+                    </Col>
+                  </Row>
+                </TaskCard>
+              </Draggable>
+            ))}
           {/* <Draggable type="task" data={`${title}_1`}>
             <TaskCard>
               <Row>
@@ -67,8 +72,8 @@ function TaskContainer({ title, id, onDrop, tasks }) {
             </AddTask>
           </Draggable> */}
         </Body>
-    </Container>
-      </Droppable>
+      </Container>
+    </Droppable>
   );
 }
 
@@ -103,7 +108,7 @@ const TaskCard = styled.div`
   cursor: pointer;
   display: block;
   margin-bottom: 8px;
-  max-width: 300px;
+  //max-width: 300px;
   min-height: 20px;
 
   & .task-card_edit {
@@ -126,5 +131,5 @@ const Container = styled.div`
   color: #172b4d;
   padding: 10px;
   margin: 10px;
-  width: 280px;
+  width: ${({ width }) => (width ? "97%" : "280px")};
 `;

@@ -10,6 +10,7 @@ import { getTasks, updateTask, updateTaskDetails } from "./MainPage.slice";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import TaskContainer from "../../components/TaskContainer";
+import { ToggleButton } from "../Input/LoginPage";
 
 const containers = [
   { label: "To Do", id: "0" },
@@ -17,9 +18,16 @@ const containers = [
   { label: "Completed", id: "2" },
 ];
 
-const MainPage = ({ history }) => {
-  const [sortedTasks, setSortedTasks] = useState({ '0': [], '1': [], '2': [] });
+const priority = [
+  { label: "urgent/important", id: "0" },
+  { label: "urgent/not important", id: "1" },
+  { label: "not Urgent/imporant", id: "2" },
+  { label: "not Urgent/not imporant", id: "3" },
+];
 
+const MainPage = ({ history }) => {
+  const [sortedTasks, setSortedTasks] = useState({ 0: [], 1: [], 2: [] });
+  const [toggle, setToggle] = useState(0);
   const dispatch = useDispatch();
 
   const {
@@ -34,16 +42,18 @@ const MainPage = ({ history }) => {
     dispatch(getTasks());
   }, []);
   useEffect(() => {
-    const tempSortedTasks = { "0": [], '1': [], '2': [] };
+    const tempSortedTasks = { 0: [], 1: [], 2: [] };
     tasks.length &&
       tasks.forEach((task) => {
-        const { status } = task;
-        console.log(status)
-        tempSortedTasks?.[`${status}`]?.push(task);
+        const { status, priority } = task;
+        console.log(status);
+        tempSortedTasks?.[toggle === 0 ? `${status}` : `${priority}`]?.push(
+          task
+        );
       });
     setSortedTasks(tempSortedTasks);
     console.log("tempSorted task,", tempSortedTasks);
-  }, [tasks]);
+  }, [tasks, toggle]);
 
   useEffect(() => {
     if (!userInfo) {
@@ -51,30 +61,69 @@ const MainPage = ({ history }) => {
     }
   }, [userInfo]);
 
-  const onDrop = ({ data:{task}, id }) => {
+  const onDrop = ({ data: { task }, id }) => {
     // const task_id = data[`task`].split(",")[0]
     // const container_id = data[`task`].split(",")[1]
     // const targetContainer_id = id
     // console.log(data,task_id,targetContainer_id,container_id ,"data");
 
-     const task2 = JSON.parse(task);
-    console.log(task2,id)
-    dispatch(updateTaskDetails({...task2,status:id}))
+    const task2 = JSON.parse(task);
+    console.log(task2, id);
+    if (toggle === 0) {
+      dispatch(updateTaskDetails({ ...task2, status: id }));
+    } else {
+      dispatch(updateTaskDetails({ ...task2, priority: id }));
+    }
   };
 
   return (
     <Row className="p-2">
       <Col md={12} lg={8}>
         <MainHud />
-        <MainBody className="d-flex">
-          {containers.map(({ label, id }) => (
-            <TaskContainer
-              onDrop={onDrop}
-              tasks={sortedTasks[id]}
-              title={label}
-              id={id}
-            />
-          ))}
+        <ToggleButton
+          onClick={() => setToggle(0)}
+          first
+          active={toggle === 0 || undefined}
+        >
+          Status
+        </ToggleButton>
+        <ToggleButton
+          onClick={() => setToggle(1)}
+          active={toggle === 1 || undefined}
+        >
+          Priority
+        </ToggleButton>
+        <MainBody className="d-flex flex-column">
+         
+          
+              {toggle === 0 ? (
+               <div className="d-flex flex-row">
+                  {containers.map(({ label, id }) => (
+                    <TaskContainer
+                      onDrop={onDrop}
+                      tasks={sortedTasks[id]}
+                      title={label}
+                      id={id}
+                    />
+                  ))}
+                   </div>
+              ) : (
+              
+                   <div className="d-flex flex-wrap flex-row justify-content-between">
+                  {" "}
+                  {priority.map(({ label, id }) => (
+                    <TaskContainer
+                      width={"50%"}
+                      onDrop={onDrop}
+                      tasks={sortedTasks[id]}
+                      title={label}
+                      id={id}
+                    />
+                  ))}
+                </div>
+              )}
+       
+        
         </MainBody>
       </Col>
       <Col md={8}>
@@ -102,7 +151,7 @@ const MainPage = ({ history }) => {
         <Row>
           <Col md={8}>
             {addTab ? (
-              <AddTask setAddTab={setAddTab} />
+              <AddTask setAddTab={setAddTab} options={priority} />
             ) : loading ? (
               <h2>loading....</h2>
             ) : tasks.length < 1 ? (
@@ -148,3 +197,4 @@ const MainPage = ({ history }) => {
 export default MainPage;
 
 const MainBody = styled.div``;
+// const ToggleButton = styled.div``;

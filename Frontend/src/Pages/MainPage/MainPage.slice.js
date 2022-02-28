@@ -185,7 +185,8 @@ export const deleteTask = ({ id }) => {
 
       const { data } = await axios.delete(`/api/quests/${id}`, config);
 
-      dispatch(deleteTaskSuccess(data));
+       dispatch(getTasks());
+      // dispatch(deleteTaskSuccess());
     } catch (error) {
       dispatch(
         deleteTaskFailed(

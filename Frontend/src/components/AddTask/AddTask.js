@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { addTask } from "../../Pages/MainPage/MainPage.slice";
 
-const AddTask = ({ setAddTab }) => {
+const AddTask = ({ setAddTab,options }) => {
   const dispatch = useDispatch();
 
   const [quest, setQuest] = useState();
@@ -68,11 +68,12 @@ const AddTask = ({ setAddTab }) => {
           <option>Hard</option>
         </DropDown>
         <DropDown onChange={(e) => setPriority(e.target.value)}>
-          <option>Select Priority</option>
+         {options?.map(({label,id})=><option value={id}>{label}</option>)}
+          {/* <option>Select Priority</option>
           <option>Optional</option>
           <option>Do last</option>
           <option>Do after priority tasks</option>
-          <option>Do First</option>
+          <option>Do First</option> */}
         </DropDown>
         {errors && <ErrorMessage>{errors}</ErrorMessage>}
         <Button onClick={handleSubmit}>add task</Button>

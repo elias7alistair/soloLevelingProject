@@ -194,7 +194,7 @@ const FormContainer = styled.div`
   padding: 15px;
   color: black;
 `;
-const ToggleButton = styled.button`
+export const ToggleButton = styled.button`
   ${({ active, first }) => `
 background: ${active ? "#7d7dd9" : "white"};
 border: 1px solid #7d7dd9;
