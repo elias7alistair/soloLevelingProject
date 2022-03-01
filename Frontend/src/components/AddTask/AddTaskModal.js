@@ -9,7 +9,7 @@ function AddTaskModal({close,addTab,options}) {
     const [quest, setQuest] = useState();
     const [date, setDate] = useState();
     const [difficulty, setDifficulty] = useState();
-    const [priority, setPriority] = useState();
+    const [priority, setPriority] = useState("0");
     const [errors, setErrors] = useState(false); 
     const handleClose = () => {close()};
     
@@ -94,24 +94,24 @@ export default AddTaskModal
 
 
 const TextInput = styled.input`
-  height: 50px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  padding: 0 20px;
-  width: 40%;
-  margin: 10px;
+height: 50px;
+outline: none;
+border-radius: 5px;
+border: 1px solid #cb8282;
+padding: 0 20px;
+width: 45%;
+margin: 10px;
 `;
 
 
 const DropDown = styled.select`
-  height: 50px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  padding: 0 20px;
-  width: 40%;
-  margin: 10px;
+height: 50px;
+outline: none;
+border-radius: 5px;
+border: 1px solid #cb8282;
+padding: 0 20px;
+width: 45%;
+margin: 10px;
 `;
 
 const ErrorMessage = styled.p`

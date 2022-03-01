@@ -89,11 +89,12 @@ const addQuest = asyncHandler(async (req, res) => {
   const { name, description, priority, difficulty, status } = req.body;
 
   //const exists = await Quest.find({ name, user: req.user._id })
-  console.log(name, req.user._id);
-  const exists = await Quest.find({ name, user: req.user._id });
-  console.log("exists", exists);
+  const getTasks = await Quest.find(   { user: req.user._id  })
+  const exists = getTasks.some(task=>task.name === name)
+  console.log(exists);
 
-  if (exists.length < 1 && name && priority && difficulty && status) {
+
+  if (!exists && name && priority && difficulty && status) {
     const quest = new Quest({
       name,
       description,
@@ -104,7 +105,7 @@ const addQuest = asyncHandler(async (req, res) => {
     });
     const createQuest = await quest.save();
     res.status(201).json(createQuest);
-  } else if (exists.length > 0) {
+  } else if (exists) {
     res.status(400);
     throw new Error("Already exists");
     return;

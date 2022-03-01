@@ -1,18 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { HiOutlinePencil } from "react-icons/hi";
+import { BsTrash } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
+import { BiCheck } from "react-icons/bi";
 import { Col, Row } from "react-bootstrap";
 import { Draggable, Droppable } from "react-drag-and-drop";
-function TaskContainer({ title, id, onDrop, tasks, width,addTab }) {
+function TaskContainer({
+  title,
+  id,
+  onDrop,
+  tasks,
+  width,
+  addTab,
+  edit,
+  setEdit,
+  editText,
+  setEditText,
+  updateName,
+  deleteTask
+}) {
   // const onDrop = (data) => {
   //   console.log(data,title);
   // };
-  console.log(tasks, title);
+ const [ref,setRef] = useState(null)
+  useEffect(()=>{
+    ref?.focus()
+  },[editText])
+  
+  const editInput = (task) => {
+    return (
+      <textarea
+        ref={e=>editText=e}
+        value={editText}
+        onChange={(e) => setEditText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            updateName(task);
+          }
+        }}
+      />
+    );
+  };
+
   return (
     <Droppable
-      style={{ width: width && width}}
+      style={{ width: width && width }}
       types={["task"]}
       onDrop={(data) => onDrop({ data, id })}
     >
@@ -29,11 +63,50 @@ function TaskContainer({ title, id, onDrop, tasks, width,addTab }) {
               <Draggable type="task" data={JSON.stringify({ ...task })}>
                 <TaskCard>
                   <Row>
-                    <Col md={10}>{task.name}</Col>
+                    <Col md={10}>
+                      {edit === task._id ? editInput(task) : task.name}
+                    </Col>
                     <Col md={2}>
-                      <a className={"task-card_edit"}>
-                        <HiOutlinePencil />
-                      </a>
+                      {edit === task._id ? (
+                       <div>
+                          <a
+                          onClick={() => {
+                            updateName(task);
+                          }}
+                          className={
+                            "task-card_edit d-flex justify-content-end"
+                          }
+                          style={{ fontSize: "20px" }}
+                        >
+                          <BiCheck />
+                        </a>   
+                          <a
+                          onClick={() => {
+                            deleteTask(task._id);
+                          }}
+                          className={
+                            "task-card_edit d-flex justify-content-end"
+                          }
+                          style={{ fontSize: "17px",marginTop: "10px" }}
+                        >
+                          <BsTrash />
+                        </a>   
+                        </div>
+                      ) : (
+                        <a
+                          onClick={() => {
+                            setEdit(task._id);
+                            setEditText(task.name);
+                            // textEdit?.focus();
+                           
+                          }}
+                          className={
+                            "task-card_edit d-flex justify-content-end"
+                          }
+                        >
+                          <HiOutlinePencil />
+                        </a>
+                      )}
                     </Col>
                   </Row>
                 </TaskCard>
@@ -71,12 +144,12 @@ function TaskContainer({ title, id, onDrop, tasks, width,addTab }) {
               <span>Add Quest</span>
             </AddTask>
           </Draggable> */}
-             <AddTask onClick={addTab}>
-              <a>
-                <AiOutlinePlus />
-              </a>{" "}
-              <span>Add Quest</span>
-            </AddTask>
+          <AddTask onClick={addTab}>
+            <a>
+              <AiOutlinePlus />
+            </a>{" "}
+            <span>Add Quest</span>
+          </AddTask>
         </Body>
       </Container>
     </Droppable>

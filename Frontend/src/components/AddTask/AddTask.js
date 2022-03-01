@@ -4,13 +4,13 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { addTask } from "../../Pages/MainPage/MainPage.slice";
 
-const AddTask = ({ setAddTab,options }) => {
+const AddTask = ({ setAddTab, options }) => {
   const dispatch = useDispatch();
 
   const [quest, setQuest] = useState();
   const [date, setDate] = useState();
   const [difficulty, setDifficulty] = useState();
-  const [priority, setPriority] = useState();
+  const [priority, setPriority] = useState("0");
   const [errors, setErrors] = useState(false);
 
   const handleErrors = () => {
@@ -39,7 +39,7 @@ const AddTask = ({ setAddTab,options }) => {
           completeBy: date,
           // status: "active",
           // description: description,
-            status:"0"
+          status: "0",
         })
       );
 
@@ -51,30 +51,38 @@ const AddTask = ({ setAddTab,options }) => {
     <AddCard>
       <Row>
         <h2>Add New Quest</h2>
-        <TextInput
-          placeholder='Enter Quest'
-          onChange={(e) => setQuest(e.target.value)}
-        ></TextInput>
-
-        <TextInput
-          placeholder='Complete By'
-          onChange={(e) => setDate(e.target.value)}
-        ></TextInput>
-
-        <DropDown onChange={(e) => setDifficulty(e.target.value)}>
-          <option>Select Difficulty</option>
-          <option>easy</option>
-          <option>intermediate</option>
-          <option>Hard</option>
-        </DropDown>
-        <DropDown onChange={(e) => setPriority(e.target.value)}>
-         {options?.map(({label,id})=><option value={id}>{label}</option>)}
-          {/* <option>Select Priority</option>
+        <InputContainer>
+          <TextInput
+            placeholder="Enter Quest"
+            onChange={(e) => setQuest(e.target.value)}
+          ></TextInput>
+        </InputContainer>
+        <InputContainer>
+          <TextInput
+            placeholder="Complete By"
+            onChange={(e) => setDate(e.target.value)}
+          ></TextInput>
+        </InputContainer>
+        <InputContainer>
+          <DropDown onChange={(e) => setDifficulty(e.target.value)}>
+            <option>Select Difficulty</option>
+            <option>easy</option>
+            <option>intermediate</option>
+            <option>Hard</option>
+          </DropDown>
+        </InputContainer>
+        <InputContainer>
+          <DropDown onChange={(e) => setPriority(e.target.value)}>
+            {options?.map(({ label, id }) => (
+              <option value={id}>{label}</option>
+            ))}
+            {/* <option>Select Priority</option>
           <option>Optional</option>
           <option>Do last</option>
           <option>Do after priority tasks</option>
-          <option>Do First</option> */}
-        </DropDown>
+        <option>Do First</option> */}
+          </DropDown>
+        </InputContainer>
         {errors && <ErrorMessage>{errors}</ErrorMessage>}
         <Button onClick={handleSubmit}>add task</Button>
       </Row>
@@ -101,12 +109,16 @@ const AddCard = styled.div`
 
 const TextInput = styled.input`
   height: 50px;
-  border: none;
+  // border: none;
   outline: none;
   border-radius: 5px;
   padding: 0 20px;
   width: 40%;
   margin: 10px;
+`;
+
+const InputContainer = styled.div`
+  border: 1px solid black;
 `;
 
 const Button = styled.button`
@@ -127,7 +139,7 @@ const Button = styled.button`
 
 const DropDown = styled.select`
   height: 50px;
-  border: none;
+  // border: none;
   outline: none;
   border-radius: 5px;
   padding: 0 20px;

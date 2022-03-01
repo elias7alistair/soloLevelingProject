@@ -6,7 +6,12 @@ import ResourcesTab from "../../components/CardComponents/ResourcesTab";
 import FilterTask from "../../components/FilterTask/FilterTask";
 import TaskTab from "../../components/TaskTab/TaskTab";
 import { useSelector } from "react-redux";
-import { getTasks, updateTask, updateTaskDetails } from "./MainPage.slice";
+import {
+  deleteTask,
+  getTasks,
+  updateTask,
+  updateTaskDetails,
+} from "./MainPage.slice";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import TaskContainer from "../../components/TaskContainer";
@@ -27,8 +32,11 @@ const priority = [
 ];
 
 const MainPage = ({ history }) => {
-  const [sortedTasks, setSortedTasks] = useState({ 0: [], 1: [], 2: [] });
+  const [sortedTasks, setSortedTasks] = useState({ 0: [], 1: [], 2: [] ,3:[]});
   const [toggle, setToggle] = useState(0);
+  const [edit, setEdit] = useState(false);
+  const [editText, setEditText] = useState(false);
+
   const dispatch = useDispatch();
 
   const {
@@ -43,7 +51,7 @@ const MainPage = ({ history }) => {
     dispatch(getTasks());
   }, []);
   useEffect(() => {
-    const tempSortedTasks = { 0: [], 1: [], 2: [] };
+    const tempSortedTasks = { 0: [], 1: [], 2: [] ,3:[] };
     tasks.length &&
       tasks.forEach((task) => {
         const { status, priority } = task;
@@ -62,6 +70,16 @@ const MainPage = ({ history }) => {
     }
   }, [userInfo]);
 
+  const updateName = (task) => {
+    if (task.name !== editText) {
+      dispatch(updateTaskDetails({ ...task, name: editText }));
+    }
+    setEdit(false);
+    setEditText(false);
+  };
+  const handleDelete = (id) => {
+    dispatch(deleteTask(id));
+  };
   const onDrop = ({ data: { task }, id }) => {
     // const task_id = data[`task`].split(",")[0]
     // const container_id = data[`task`].split(",")[1]
@@ -103,6 +121,12 @@ const MainPage = ({ history }) => {
                   tasks={sortedTasks[id]}
                   title={label}
                   id={id}
+                  deleteTask={handleDelete}
+                  edit={edit}
+                  setEdit={setEdit}
+                  editText={editText}
+                  setEditText={setEditText}
+                  updateName={updateName}
                   addTab={() => setAddTab(true)}
                 />
               ))}
@@ -114,8 +138,14 @@ const MainPage = ({ history }) => {
                 <TaskContainer
                   width={"50%"}
                   onDrop={onDrop}
+                  deleteTask={handleDelete}
                   tasks={sortedTasks[id]}
                   title={label}
+                  edit={edit}
+                  setEdit={setEdit}
+                  updateName={updateName}
+                  editText={editText}
+                  setEditText={setEditText}
                   id={id}
                   addTab={() => setAddTab(true)}
                 />
@@ -124,8 +154,12 @@ const MainPage = ({ history }) => {
           )}
         </MainBody>
       </Col>
-      <AddTaskModal close={() => setAddTab(false)} addTab={addTab}options={priority} />
-      <Col md={8}>
+      <AddTaskModal
+        close={() => setAddTab(false)}
+        addTab={addTab}
+        options={priority}
+      />
+      {/* <Col md={8}>
         {" "}
         <MainHud />
         <Col
@@ -185,7 +219,7 @@ const MainPage = ({ history }) => {
             <MainHud />
           </Col>
         </Row>
-      </Col>
+      </Col> */}
       <Col md={4}>
         <ResourcesTab />
       </Col>

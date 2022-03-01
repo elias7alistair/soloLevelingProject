@@ -168,7 +168,7 @@ export const getTasks = () => {
   };
 };
 
-export const deleteTask = ({ id }) => {
+export const deleteTask = (id) => {
   return async (dispatch, getState) => {
     try {
       dispatch(requestDeleteTask());
