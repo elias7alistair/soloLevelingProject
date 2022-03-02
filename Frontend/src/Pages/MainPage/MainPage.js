@@ -7,8 +7,11 @@ import FilterTask from "../../components/FilterTask/FilterTask";
 import TaskTab from "../../components/TaskTab/TaskTab";
 import { useSelector } from "react-redux";
 import {
+  deleteGoals,
   deleteTask,
+  getGoals,
   getTasks,
+  updateGoalsDetails,
   updateTask,
   updateTaskDetails,
 } from "./MainPage.slice";
@@ -17,6 +20,7 @@ import styled from "styled-components";
 import TaskContainer from "../../components/TaskContainer";
 import { ToggleButton } from "../Input/LoginPage";
 import AddTaskModal from "../../components/AddTask/AddTaskModal";
+import AddGoalsModal from "../../components/AddGoals/AddGoalsModal";
 
 const containers = [
   { label: "To Do", id: "0" },
@@ -30,9 +34,20 @@ const priority = [
   { label: "not Urgent/imporant", id: "2" },
   { label: "not Urgent/not imporant", id: "3" },
 ];
+const impact = [
+  { label: "low", id: "0" },
+  { label: "medium", id: "1" },
+  { label: "high", id: "2" },
+  { label: "very High", id: "3" },
+];
 
 const MainPage = ({ history }) => {
-  const [sortedTasks, setSortedTasks] = useState({ 0: [], 1: [], 2: [] ,3:[]});
+  const [sortedTasks, setSortedTasks] = useState({
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+  });
   const [toggle, setToggle] = useState(0);
   const [edit, setEdit] = useState(false);
   const [editText, setEditText] = useState(false);
@@ -41,17 +56,22 @@ const MainPage = ({ history }) => {
 
   const {
     tasks,
+    goals,
     taskLoading: loading,
+    goalLoading: goalLoading,
     errors,
   } = useSelector((state) => state.tasks);
   const { userInfo } = useSelector((state) => state.input);
   const [addTab, setAddTab] = useState(false);
+  const [addGoals, setAddGoals] = useState(false);
+  const [isGoalsEdit, setIsGoalsEdit] = useState(false);
   console.log(tasks, "geeg");
   useEffect(() => {
     dispatch(getTasks());
+    dispatch(getGoals());
   }, []);
   useEffect(() => {
-    const tempSortedTasks = { 0: [], 1: [], 2: [] ,3:[] };
+    const tempSortedTasks = { 0: [], 1: [], 2: [], 3: [] };
     tasks.length &&
       tasks.forEach((task) => {
         const { status, priority } = task;
@@ -71,14 +91,26 @@ const MainPage = ({ history }) => {
   }, [userInfo]);
 
   const updateName = (task) => {
-    if (task.name !== editText) {
-      dispatch(updateTaskDetails({ ...task, name: editText }));
+    if(isGoalsEdit){
+      if (task.name !== editText) {
+        dispatch(updateGoalsDetails({ ...task, name: editText }));
+      }
     }
+    else{
+
+      if (task.name !== editText) {
+        dispatch(updateTaskDetails({ ...task, name: editText }));
+      }
+    }
+    setIsGoalsEdit(false);
     setEdit(false);
     setEditText(false);
   };
   const handleDelete = (id) => {
     dispatch(deleteTask(id));
+  };
+  const handleDeleteGoal = (id) => {
+    dispatch(deleteGoals(id));
   };
   const onDrop = ({ data: { task }, id }) => {
     // const task_id = data[`task`].split(",")[0]
@@ -159,6 +191,11 @@ const MainPage = ({ history }) => {
         addTab={addTab}
         options={priority}
       />
+      <AddGoalsModal
+        close={() => setAddGoals(false)}
+        addTab={addGoals}
+        options={impact}
+      />
       {/* <Col md={8}>
         {" "}
         <MainHud />
@@ -221,7 +258,22 @@ const MainPage = ({ history }) => {
         </Row>
       </Col> */}
       <Col md={4}>
-        <ResourcesTab />
+        <ResourcesTab
+          onDrop={() => {}}
+          goals={goals}
+          title={"Longterm Goals"}
+          addGoals={() => setAddGoals(true)}
+          close={() => {
+            setAddGoals(false);
+          }}
+          updateName={updateName}
+          deleteGoals={handleDeleteGoal}
+          edit={edit}
+          setEdit={setEdit}
+          editText={editText}
+          setEditText={setEditText}
+          isGoalsEdit={isGoalsEdit} setIsGoalsEdit={setIsGoalsEdit}
+        />
       </Col>
     </Row>
   );

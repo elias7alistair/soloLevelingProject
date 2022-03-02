@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import path from 'path'
 import questRoutes from "./routes/questRoutes.js";
+import goalRoutes from "./routes/goalRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import cors from "cors";
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(cors());
 app.use("/api/stats", statsRoutes);
 app.use("/api/quests", questRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/goals", goalRoutes);
 
 const __dirname = path.resolve()
 

@@ -18,7 +18,10 @@ const filterTask = (list, id) => {
 
 const initialState = {
   tasks: [],
+  goals: [],
   taskLoading: false,
+  goalsLoading: false,
+  goalsErrors: false,
   errors: false,
 };
 // const initialState = {
@@ -51,6 +54,17 @@ const taskSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
+    requestGetGoals(state) {
+      state.goalsLoading = true;
+    },
+    getGoalsSuccess(state, action) {
+      state.goalsLoading = false;
+      state.goals = action.payload;
+    },
+    getGoalsFailed(state, action) {
+      state.goalsLoading = false;
+      state.Goalserrors = action.payload;
+    },
     requestGetTask(state) {
       state.taskLoading = true;
     },
@@ -60,6 +74,24 @@ const taskSlice = createSlice({
     },
     getTaskFailed(state, action) {
       state.taskLoading = false;
+      state.errors = action.payload;
+    },
+    requestGoalsStatus(state) {
+      state.goalsLoading = true;
+    },
+    goalsStatusSuccess(state, action) {
+      state.goalsLoading = false;
+      console.log('hehehags123',action.payload)
+      const newGoals = state.goals.map((data) => {
+        if (data._id === action.payload._id) {
+          data.isCompleted = action.payload.isCompleted;
+        }
+        return data;
+      });
+      state.goals = [...newGoals];
+    },
+    goalsStatusFailed(state, action) {
+      state.goalsLoading = false;
       state.errors = action.payload;
     },
     requestTaskStatus(state) {
@@ -91,6 +123,17 @@ const taskSlice = createSlice({
       state.taskLoading = false;
       state.errors = action.payload;
     },
+    requestDeleteGoals(state) {
+      state.goalsLoading = true;
+    },
+    deleteGoalsSuccess(state, action) {
+      state.goalsLoading = false;
+      state.goals = action.payload;
+    },
+    deleteGoalsFailed(state, action) {
+      state.goalsLoading = false;
+      state.errors = action.payload;
+    },
     requestAddTask(state) {
       state.taskLoading = true;
     },
@@ -101,6 +144,18 @@ const taskSlice = createSlice({
     },
     addTaskFailed(state, action) {
       state.taskLoading = false;
+      state.errors = action.payload;
+    },
+    requestAddGoals(state) {
+      state.goalsLoading = true;
+    },
+    addGoalsSuccess(state, action) {
+      state.goalsLoading = false;
+      state.goals = updateId([...state.goals, action.payload]);
+      //  console.log(action.payload);
+    },
+    addGoalsFailed(state, action) {
+      state.goalsLoading = false;
       state.errors = action.payload;
     },
     // addTask(state, action) {
@@ -128,6 +183,9 @@ export const {
   taskStatusSuccess,
   removeTask,
   updateTasks,
+  requestGetGoals,
+  getGoalsSuccess,
+  getGoalsFailed,
   requestGetTask,
   getTaskSuccess,
   getTaskFailed,
@@ -137,9 +195,37 @@ export const {
   addTaskFailed,
   requestAddTask,
   addTaskSuccess,
+  addGoalsFailed,addGoalsSuccess,requestAddGoals,goalsStatusFailed,requestGoalsStatus ,goalsStatusSuccess,deleteGoalsFailed,deleteGoalsSuccess,requestDeleteGoals
 } = taskSlice.actions;
 
 export default taskSlice.reducer;
+
+export const getGoals = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(requestGetGoals);
+      const {
+        input: { userInfo },
+      } = getState();
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.get(`/api/goals/mygoals`, config);
+      dispatch(getGoalsSuccess(data));
+    } catch (error) {
+      dispatch(
+        getGoalsFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
 
 export const getTasks = () => {
   return async (dispatch, getState) => {
@@ -199,6 +285,42 @@ export const deleteTask = (id) => {
   };
 };
 
+export const deleteGoals = (id) => {
+  return async (dispatch, getState) => {
+    console.log('delete goal')
+    try {
+      console.log('delete goal224')
+      dispatch(requestDeleteGoals());
+      const {
+        input: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      console.log('delete goal22')
+      const { data } = await axios.delete(`/api/goals/${id}`, config);
+
+       dispatch(getGoals());
+       console.log('delete goal2')
+      // dispatch(deleteTaskSuccess());
+    } catch (error) {
+      console.log(error)
+      dispatch(
+        deleteGoalsFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
+
 export const updateTaskDetails = (task) => {
   return async (dispatch, getState) => {
     console.log(task)
@@ -228,6 +350,44 @@ export const updateTaskDetails = (task) => {
       console.log(error)
       dispatch(
         taskStatusFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
+
+export const updateGoalsDetails = (goals) => {
+  return async (dispatch, getState) => {
+    console.log(goals)
+    try {
+      dispatch(requestGoalsStatus());
+     
+      const {
+        input: { userInfo },
+      } = getState();
+     
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/goals/updateGoals/${goals._id}`,
+        {...goals},
+        config
+      );
+    
+      dispatch(goalsStatusSuccess(data));
+      dispatch(getGoals());
+    } catch (error) {
+      console.log(error)
+      dispatch(
+        goalsStatusFailed(
           error.response && error.response.data.message
             ? error.response.data.message
             : error.message
@@ -291,6 +451,35 @@ export const addTask = (task) => {
     } catch (error) {
       dispatch(
         addTaskFailed(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
+};
+export const addGoals = (goals) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(requestAddGoals());
+      const {
+        input: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(`/api/goals`, goals, config);
+
+      dispatch(addGoalsSuccess(data));
+    } catch (error) {
+      dispatch(
+        addGoalsFailed(
           error.response && error.response.data.message
             ? error.response.data.message
             : error.message
