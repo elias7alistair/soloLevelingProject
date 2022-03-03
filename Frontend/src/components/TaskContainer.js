@@ -4,7 +4,7 @@ import { FiMoreHorizontal } from "react-icons/fi";
 import { HiOutlinePencil } from "react-icons/hi";
 import { BsTrash } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
-import { BiCheck } from "react-icons/bi";
+import { BiCheck,BiEdit } from "react-icons/bi";
 import { Col, Row } from "react-bootstrap";
 import { Draggable, Droppable } from "react-drag-and-drop";
 function TaskContainer({
@@ -19,7 +19,7 @@ function TaskContainer({
   editText,
   setEditText,
   updateName,
-  deleteTask
+  deleteTask,setUpdateData
 }) {
   // const onDrop = (data) => {
   //   console.log(data,title);
@@ -69,6 +69,20 @@ function TaskContainer({
                     <Col md={2}>
                       {edit === task._id ? (
                        <div>
+                         <div className="d-flex justify-content-end">
+
+                          <a
+                          onClick={() => {
+                            //updateName(task);
+                            setUpdateData(task)
+                          }}
+                          className={
+                            "task-card_edit d-flex justify-content-end"
+                          }
+                          style={{ fontSize: "20px",marginRight: '10px' }}
+                          >
+                          <BiEdit />
+                        </a>   
                           <a
                           onClick={() => {
                             updateName(task);
@@ -77,9 +91,11 @@ function TaskContainer({
                             "task-card_edit d-flex justify-content-end"
                           }
                           style={{ fontSize: "20px" }}
-                        >
+                          >
                           <BiCheck />
                         </a>   
+                          </div>
+                         
                           <a
                           onClick={() => {
                             deleteTask(task._id);

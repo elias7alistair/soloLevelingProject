@@ -86,7 +86,7 @@ const getQuestByUser = asyncHandler(async (req, res) => {
 
 // post add quest
 const addQuest = asyncHandler(async (req, res) => {
-  const { name, description, priority, difficulty, status } = req.body;
+  const { name, description, priority, difficulty, status,associatedWith } = req.body;
 
   //const exists = await Quest.find({ name, user: req.user._id })
   const getTasks = await Quest.find(   { user: req.user._id  })
@@ -102,6 +102,7 @@ const addQuest = asyncHandler(async (req, res) => {
       difficulty,
       status,
       user: req.user._id,
+      associatedWith
     });
     const createQuest = await quest.save();
     res.status(201).json(createQuest);

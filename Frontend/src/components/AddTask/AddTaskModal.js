@@ -1,18 +1,41 @@
-import React, { useState } from "react";
-import { Modal,Button } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { addTask } from "../../Pages/MainPage/MainPage.slice";
+import {
+  addTask,
+  updateTaskDetails,
+} from "../../Pages/MainPage/MainPage.slice";
 
-function AddTaskModal({close,addTab,options}) {
-    const dispatch = useDispatch();
-    const [quest, setQuest] = useState();
-    const [date, setDate] = useState();
-    const [difficulty, setDifficulty] = useState();
-    const [priority, setPriority] = useState("0");
-    const [errors, setErrors] = useState(false); 
-    const handleClose = () => {close()};
-    
+function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEdit}) {
+  const dispatch = useDispatch();
+  const [quest, setQuest] = useState();
+  const [date, setDate] = useState();
+  const [difficulty, setDifficulty] = useState();
+  const [priority, setPriority] = useState();
+  const [associatedWith, setAssociatedWith] = useState();
+  const [errors, setErrors] = useState(false);
+  const handleClose = () => {
+    close();
+  };
+  console.log(quest,date,difficulty,priority,associatedWith,'check data3')
+  useEffect(() => {
+    if(data){
+      console.log(data,'check data')
+      data.name && setQuest(data.name);
+      data.completeBy && setDate(data.completeBy);
+      data.difficulty && setDifficulty(data.difficulty);
+      data.priority && setPriority(data.priority);
+      data.associatedWith && setAssociatedWith(data.associatedWith);
+    } else {
+    setQuest();
+     setDate();
+   setDifficulty();
+      setPriority();
+     setAssociatedWith();
+    }
+  }, [data]);
+
   const handleErrors = () => {
     if (!quest) {
       setErrors("Please Enter Quest");
@@ -31,17 +54,33 @@ function AddTaskModal({close,addTab,options}) {
     handleErrors();
     if (quest && date && difficulty && priority && !errors) {
       console.log(quest, date, difficulty, priority);
-      dispatch(
-        addTask({
-          name: quest,
-          priority: priority,
-          difficulty: difficulty,
-          completeBy: date,
-          // status: "active",
-          // description: description,
-            status:"0"
-        })
-      );
+      if (data) {
+        dispatch(
+          updateTaskDetails({
+            ...data,
+            name: quest,
+            priority: priority,
+            difficulty: difficulty,
+            completeBy: date,
+            associatedWith: associatedWith || "",
+          })
+        );
+        setUpdateData(false)
+        setEdit(false)
+      } else {
+        dispatch(
+          addTask({
+            name: quest,
+            priority: priority,
+            difficulty: difficulty,
+            completeBy: date,
+            associatedWith: associatedWith || "",
+            // status: "active",
+            // description: description,
+            status: "0",
+          })
+        );
+      }
 
       handleClose(false);
     }
@@ -49,27 +88,38 @@ function AddTaskModal({close,addTab,options}) {
 
   return (
     <Modal show={addTab} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body> <TextInput
-          placeholder='Enter Quest'
-          onChange={(e) => setQuest(e.target.value)}
-        ></TextInput>
-
+      <Modal.Header closeButton>
+        <Modal.Title>{!data ? "Add Task" : "Edit Task"}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {" "}
         <TextInput
-          placeholder='Complete By'
-          onChange={(e) => setDate(e.target.value)}
+          placeholder="Enter Quest"
+          onChange={(e) => setQuest(e.target.value)}
+          value={quest}
         ></TextInput>
-
-        <DropDown onChange={(e) => setDifficulty(e.target.value)}>
+        <TextInput
+          placeholder="Complete By"
+          onChange={(e) => setDate(e.target.value)}
+          value={date}
+        ></TextInput>
+        <DropDown  value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
           <option>Select Difficulty</option>
           <option>easy</option>
           <option>intermediate</option>
           <option>Hard</option>
         </DropDown>
-        <DropDown onChange={(e) => setPriority(e.target.value)}>
-         {options?.map(({label,id})=><option value={id}>{label}</option>)}
+        <DropDown value={associatedWith} onChange={(e) => setAssociatedWith(e.target.value)}>
+          <option>Associated With Goal</option>
+          {goals?.map(({ name, _id }) => (
+            <option value={_id}>{name}</option>
+          ))}
+        </DropDown>
+        <DropDown value={priority} onChange={(e) => setPriority(e.target.value)}>
+          <option>Select Priority</option>
+          {options?.map(({ label, id }) => (
+            <option value={id}>{label}</option>
+          ))}
           {/* <option>Select Priority</option>
           <option>Optional</option>
           <option>Do last</option>
@@ -77,41 +127,39 @@ function AddTaskModal({close,addTab,options}) {
           <option>Do First</option> */}
         </DropDown>
         {errors && <ErrorMessage>{errors}</ErrorMessage>}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSubmit}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-  )
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
+          Save Changes
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
 }
 
-export default AddTaskModal
-
+export default AddTaskModal;
 
 const TextInput = styled.input`
-height: 50px;
-outline: none;
-border-radius: 5px;
-border: 1px solid #cb8282;
-padding: 0 20px;
-width: 45%;
-margin: 10px;
+  height: 50px;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #cb8282;
+  padding: 0 20px;
+  width: 45%;
+  margin: 10px;
 `;
 
-
 const DropDown = styled.select`
-height: 50px;
-outline: none;
-border-radius: 5px;
-border: 1px solid #cb8282;
-padding: 0 20px;
-width: 45%;
-margin: 10px;
+  height: 50px;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #cb8282;
+  padding: 0 20px;
+  width: 45%;
+  margin: 10px;
 `;
 
 const ErrorMessage = styled.p`

@@ -49,6 +49,7 @@ const MainPage = ({ history }) => {
     3: [],
   });
   const [toggle, setToggle] = useState(0);
+  const [updateData,setUpdateData] = useState(false)
   const [edit, setEdit] = useState(false);
   const [editText, setEditText] = useState(false);
 
@@ -70,6 +71,14 @@ const MainPage = ({ history }) => {
     dispatch(getTasks());
     dispatch(getGoals());
   }, []);
+
+  useEffect(()=>{
+    if(updateData){
+
+      setAddTab(true)
+    }
+  },[updateData])
+
   useEffect(() => {
     const tempSortedTasks = { 0: [], 1: [], 2: [], 3: [] };
     tasks.length &&
@@ -149,6 +158,7 @@ const MainPage = ({ history }) => {
             <div className="d-flex flex-row">
               {containers.map(({ label, id }) => (
                 <TaskContainer
+                setUpdateData={setUpdateData}
                   onDrop={onDrop}
                   tasks={sortedTasks[id]}
                   title={label}
@@ -168,6 +178,7 @@ const MainPage = ({ history }) => {
               {" "}
               {priority.map(({ label, id }) => (
                 <TaskContainer
+                setUpdateData={setUpdateData}
                   width={"50%"}
                   onDrop={onDrop}
                   deleteTask={handleDelete}
@@ -187,14 +198,22 @@ const MainPage = ({ history }) => {
         </MainBody>
       </Col>
       <AddTaskModal
-        close={() => setAddTab(false)}
+        close={() => {
+          setAddTab(false)
+          setUpdateData(false)
+        }}
         addTab={addTab}
         options={priority}
+        setEdit={setEdit}
+        goals={goals}   data={updateData}
+        setUpdateData={setUpdateData}
       />
       <AddGoalsModal
         close={() => setAddGoals(false)}
         addTab={addGoals}
         options={impact}
+        goals={goals}
+     
       />
       {/* <Col md={8}>
         {" "}
