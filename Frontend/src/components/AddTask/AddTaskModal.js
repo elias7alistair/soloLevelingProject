@@ -15,6 +15,7 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
   const [priority, setPriority] = useState();
   const [associatedWith, setAssociatedWith] = useState();
   const [errors, setErrors] = useState(false);
+  
   const handleClose = () => {
     close();
   };

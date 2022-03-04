@@ -23,20 +23,22 @@ function GoalTab({
   updateName,
   deleteGoals,
   addGoals,
-  setIsGoalsEdit
+  setIsGoalsEdit,
+  currentGoal,
+  setCurrentGoal,
 }) {
   // const onDrop = (data) => {
   //   console.log(data,title);
   // };
- const [ref,setRef] = useState(null)
-  useEffect(()=>{
-    ref?.focus()
-  },[editText])
-  
+  const [ref, setRef] = useState(null);
+  useEffect(() => {
+    ref?.focus();
+  }, [editText]);
+
   const editInput = (task) => {
     return (
       <textarea
-        ref={e=>editText=e}
+        ref={(e) => (editText = e)}
         value={editText}
         onChange={(e) => setEditText(e.target.value)}
         onKeyDown={(e) => {
@@ -62,40 +64,54 @@ function GoalTab({
           </a>
         </Header>
         <Body>
+          <Draggable>
+            <TaskCard
+              active={currentGoal === "all" || undefined}
+              onClick={() => setCurrentGoal("all")}
+            >
+              <Row>
+                <Col md={10}>All Goals</Col>
+                <Col md={2}></Col>
+              </Row>
+            </TaskCard>
+          </Draggable>
           {goals?.length > 0 &&
             goals?.map((task) => (
               <Draggable type="task" data={JSON.stringify({ ...task })}>
-                <TaskCard>
+                <TaskCard
+                  active={currentGoal === task._id || undefined}
+                  onClick={() => setCurrentGoal(task._id)}
+                >
                   <Row>
                     <Col md={10}>
                       {edit === task._id ? editInput(task) : task.name}
                     </Col>
                     <Col md={2}>
                       {edit === task._id ? (
-                       <div>
+                        <div>
                           <a
-                          onClick={() => {
-                            updateName(task);
-                          }}
-                          className={
-                            "task-card_edit d-flex justify-content-end"
-                          }
-                          style={{ fontSize: "20px" }}
-                        >
-                          <BiCheck />
-                        </a>   
+                            onClick={() => {
+                              updateName(task);
+                            }}
+                            className={
+                              "task-card_edit d-flex justify-content-end"
+                            }
+                            style={{ fontSize: "20px" }}
+                          >
+                            <BiCheck />
+                          </a>
                           <a
-                          onClick={() => {
-                         //   deleteTask(task._id);
-                         deleteGoals(task._id)
-                          }}
-                          className={
-                            "task-card_edit d-flex justify-content-end"
-                          }
-                          style={{ fontSize: "17px",marginTop: "10px" }}
-                        >
-                          <BsTrash />
-                        </a>   
+                            onClick={() => {
+                              //   deleteTask(task._id);
+                              deleteGoals(task._id);
+                            }}
+                            className={
+                              "task-card_edit d-flex justify-content-end"
+                            }
+                            style={{ fontSize: "17px", marginTop: "10px" }}
+                          >
+                            <BsTrash />
+                          </a>
                         </div>
                       ) : (
                         <a
@@ -103,7 +119,7 @@ function GoalTab({
                             setEdit(task._id);
                             setEditText(task.name);
                             // textEdit?.focus();
-                            setIsGoalsEdit(true)
+                            setIsGoalsEdit(true);
                           }}
                           className={
                             "task-card_edit d-flex justify-content-end"
@@ -117,38 +133,6 @@ function GoalTab({
                 </TaskCard>
               </Draggable>
             ))}
-          {/* <Draggable type="task" data={`${title}_1`}>
-            <TaskCard>
-              <Row>
-                <Col md={10}>lorea ae rae aer esfasjfsdoaf sdf</Col>
-                <Col md={2}>
-                  <a className={"task-card_edit"}>
-                    <HiOutlinePencil />
-                  </a>
-                </Col>
-              </Row>
-            </TaskCard>
-          </Draggable>
-          <Draggable type="task" data={`${title}_2`}>
-            <TaskCard>
-              <Row>
-                <Col md={10}>lorea ae rae aer esfasjfsdoaf sdf</Col>
-                <Col md={2}>
-                  <a className={"task-card_edit"}>
-                    <HiOutlinePencil />
-                  </a>
-                </Col>
-              </Row>
-            </TaskCard>
-          </Draggable>{" "}
-          <Draggable type="task" data={`${title}_3`}>
-            <AddTask>
-              <a>
-                <AiOutlinePlus />
-              </a>{" "}
-              <span>Add Quest</span>
-            </AddTask>
-          </Draggable> */}
           <AddTask onClick={addGoals}>
             <a>
               <AiOutlinePlus />
@@ -186,7 +170,7 @@ const TaskCard = styled.div`
   background: white;
   padding: 6px 8px 2px;
 
-  background-color: #fff;
+  background-color: ${({ active }) => (active ? "#dce6ff" : "#fff")};
   border-radius: 3px;
   box-shadow: 0 1px 0 #091e4240;
   cursor: pointer;
@@ -210,11 +194,11 @@ const TaskCard = styled.div`
 `;
 
 const Container = styled.div`
-//  background-color: #ebecf0;
-border: 1px solid gray;
+  //  background-color: #ebecf0;
+  border: 1px solid gray;
   border-radius: 3px;
   color: #172b4d;
   padding: 10px;
- // margin: 10px;
-  width: 100%
+  // margin: 10px;
+  width: 100%;
 `;
