@@ -7,7 +7,7 @@ import Home from "./Pages/Input/Home";
 import Navbar from "./components/Navbar/Navbar";
 import Axios from "axios";
 
-Axios.defaults.baseURL = "http://127.0.0.1:5000/";
+Axios.defaults.baseURL = "https://sololeveling.herokuapp.com/";
 
 function App() {
   return (
