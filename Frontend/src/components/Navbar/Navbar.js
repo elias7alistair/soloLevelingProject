@@ -12,12 +12,18 @@ const Navbar = () => {
           background: #343d44;
           flex-direction: row;
           padding: 10px;
+          align-items: center;
+          & a {
+            cursor: pointer;
+            color:white !important;
+          }
         `}
       >
         <h1>Solo Leveling</h1>
-        <a onClick={()=>{dispatch(logout())}}>logout</a>
+        <a  onClick={()=>{dispatch(logout())}}>logout</a>
       </div>
     )
 }
 
 export default Navbar
+
