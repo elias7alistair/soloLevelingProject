@@ -66,7 +66,7 @@ const MainPage = ({ history }) => {
   const [addTab, setAddTab] = useState(false);
   const [addGoals, setAddGoals] = useState(false);
   const [isGoalsEdit, setIsGoalsEdit] = useState(false);
-  const [Recommend, setRecommend] = useState(true);
+  const [Recommend, setRecommend] = useState(false);
   console.log(tasks, "geeg");
   useEffect(() => {
     dispatch(getTasks());
