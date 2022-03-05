@@ -25,7 +25,7 @@ const LoginPage = () => {
 
   const demoLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ name:'alistair2', password:'1234567' }));
+    dispatch(login({ name:'alistair2', password:'123456' }));
     console.log(name, password);
   }
   const register = (e) => {
