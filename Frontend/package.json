@@ -1,6 +1,7 @@
 {
   "name": "sololeveling",
   "version": "0.1.0",
+  "proxy": "https://sololeveling.herokuapp.com",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
