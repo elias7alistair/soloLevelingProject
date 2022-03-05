@@ -1,9 +1,11 @@
 import React from 'react'
 import "styled-components/macro";
 import { logout } from '../../Pages/Input/input.slice';
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 const Navbar = () => {
  const dispatch = useDispatch()
+ const { userInfo } = useSelector((state) => state.input);
+
     return (
         <div
         css={`
@@ -20,7 +22,7 @@ const Navbar = () => {
         `}
       >
         <h1>Solo Leveling</h1>
-        <a  onClick={()=>{dispatch(logout())}}>logout</a>
+      {userInfo &&  <a  onClick={()=>{dispatch(logout())}}>logout</a>}
       </div>
     )
 }

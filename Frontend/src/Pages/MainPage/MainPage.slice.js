@@ -54,6 +54,10 @@ const taskSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
+    clearState(state){
+      state.goals = []
+      state.tasks = []
+    },
     requestGetGoals(state) {
       state.goalsLoading = true;
     },
@@ -178,7 +182,7 @@ const taskSlice = createSlice({
 });
 
 export const {
-  requestTaskStatus,
+  requestTaskStatus,clearState,
   taskStatusFailed,
   taskStatusSuccess,
   removeTask,

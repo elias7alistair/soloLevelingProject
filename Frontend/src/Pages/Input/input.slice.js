@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import axios from "axios";
+import { clearState } from "../MainPage/MainPage.slice";
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
@@ -121,6 +122,8 @@ export const handleRegister = ({ name, email, password }) => {
 
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
+
+  dispatch(clearState());
   dispatch(userLogout());
 };
 
