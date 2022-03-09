@@ -7,13 +7,15 @@ import {
   updateTaskDetails,
 } from "../../Pages/MainPage/MainPage.slice";
 
-function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEdit}) {
+function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEdit,statusOptions}) {
   const dispatch = useDispatch();
   const [quest, setQuest] = useState();
   const [date, setDate] = useState();
   const [difficulty, setDifficulty] = useState();
   const [priority, setPriority] = useState();
   const [associatedWith, setAssociatedWith] = useState();
+  const [status, setStatus] = useState(0);
+  const [description, setDescription] = useState();
   const [errors, setErrors] = useState(false);
   
   const handleClose = () => {
@@ -28,12 +30,16 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
       data.difficulty && setDifficulty(data.difficulty);
       data.priority && setPriority(data.priority);
       data.associatedWith && setAssociatedWith(data.associatedWith);
+      data.description && setDescription(data.description);
+      data.status && setStatus(data.status);
     } else {
     setQuest();
      setDate();
    setDifficulty();
       setPriority();
      setAssociatedWith();
+     setDescription()
+     setStatus(0)
     }
   }, [data]);
 
@@ -64,6 +70,9 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
             difficulty: difficulty,
             completeBy: date,
             associatedWith: associatedWith || "",
+            status: status,
+            description: description || '',
+
           })
         );
         setUpdateData(false)
@@ -76,9 +85,11 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
             difficulty: difficulty,
             completeBy: date,
             associatedWith: associatedWith || "",
+            status: status,
+            description: description || '',
             // status: "active",
             // description: description,
-            status: "0",
+            // status: "0",
           })
         );
       }
@@ -99,6 +110,7 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
           onChange={(e) => setQuest(e.target.value)}
           value={quest}
         ></TextInput>
+      
         <TextInput
           placeholder="Complete By"
           onChange={(e) => setDate(e.target.value)}
@@ -127,6 +139,22 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
           <option>Do after priority tasks</option>
           <option>Do First</option> */}
         </DropDown>
+        <DropDown value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option>Select Status</option>
+          {statusOptions?.map(({ label, id }) => (
+            <option value={id}>{label}</option>
+          ))}
+          {/* <option>Select Priority</option>
+          <option>Optional</option>
+          <option>Do last</option>
+          <option>Do after priority tasks</option>
+          <option>Do First</option> */}
+        </DropDown>
+        <TextArea
+          placeholder="Enter Description"
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
+        ></TextArea>
         {errors && <ErrorMessage>{errors}</ErrorMessage>}
       </Modal.Body>
       <Modal.Footer>
@@ -150,6 +178,15 @@ const TextInput = styled.input`
   border: 1px solid #cb8282;
   padding: 0 20px;
   width: 45%;
+  margin: 10px;
+`;
+const TextArea = styled.textarea`
+  
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid #cb8282;
+  padding: 0 20px;
+  width: 93%;
   margin: 10px;
 `;
 

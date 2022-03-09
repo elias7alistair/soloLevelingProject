@@ -137,7 +137,7 @@ const MainPage = ({ history }) => {
   };
 
   return (
-    <Row className="p-2">
+    <Row className="m-2">
       <Col md={12} lg={8}>
         <MainHud />
         <div className="d-flex justify-content-between">
@@ -263,6 +263,7 @@ const MainPage = ({ history }) => {
         setEdit={setEdit}
         goals={goals}
         data={updateData}
+        statusOptions={containers}
         setUpdateData={setUpdateData}
       />
       <AddGoalsModal

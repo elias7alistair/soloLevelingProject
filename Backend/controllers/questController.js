@@ -17,7 +17,7 @@ const updateQuestDetails = asyncHandler(async (req, res) => {
     quest.status = req.body.status || quest.status;
     quest.description = req.body.description || quest.description;
     quest.associatedWith = req.body.associatedWith || quest.associatedWith;
-
+    quest.description = req.body.description || quest.description
 
     const updateQuest = await quest.save();
     res.json(updateQuest)
