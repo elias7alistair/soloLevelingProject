@@ -46,9 +46,7 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
   const handleErrors = () => {
     if (!quest) {
       setErrors("Please Enter Quest");
-    } else if (!date) {
-      setErrors("Please Enter Date");
-    } else if (!difficulty || difficulty === "Select Difficulty") {
+    }  else if (!difficulty || difficulty === "Select Difficulty") {
       setErrors("Please Select Difficulty");
     } else if (!priority || priority === "Select Priority") {
       setErrors("Please Select Priority");
@@ -59,7 +57,7 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
 
   const handleSubmit = () => {
     handleErrors();
-    if (quest && date && difficulty && priority && !errors) {
+    if (quest && difficulty && priority && !errors) {
       console.log(quest, date, difficulty, priority);
       if (data) {
         dispatch(
@@ -68,7 +66,7 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
             name: quest,
             priority: priority,
             difficulty: difficulty,
-            completeBy: date,
+            completeBy: date || "",
             associatedWith: associatedWith || "",
             status: status,
             description: description || '',

@@ -85,7 +85,7 @@ const MainPage = ({ history }) => {
       tasks.forEach((task) => {
         const { status, priority, associatedWith } = task;
         console.log(status);
-        (associatedWith === currentGoal || currentGoal === "all") &&
+        (associatedWith === currentGoal || currentGoal === 'Unassigned' && !associatedWith || currentGoal === "all" ) &&
           ((status !== "2" && toggle === 1) || toggle === 0) &&
           tempSortedTasks?.[toggle === 0 ? `${status}` : `${priority}`]?.push(
             task

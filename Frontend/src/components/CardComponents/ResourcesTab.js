@@ -133,6 +133,17 @@ function GoalTab({
                 </TaskCard>
               </Draggable>
             ))}
+               <Draggable>
+            <TaskCard
+              active={currentGoal === "Unassigned" || undefined}
+              onClick={() => setCurrentGoal("Unassigned")}
+            >
+              <Row>
+                <Col md={10}>Unassigned</Col>
+                <Col md={2}></Col>
+              </Row>
+            </TaskCard>
+          </Draggable>
           <AddTask onClick={addGoals}>
             <a>
               <AiOutlinePlus />
