@@ -4,9 +4,25 @@ import { FiMoreHorizontal } from "react-icons/fi";
 import { HiOutlinePencil } from "react-icons/hi";
 import { BsTrash } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
-import { BiCheck,BiEdit } from "react-icons/bi";
-import { Col, Row } from "react-bootstrap";
+import { BiCheck, BiEdit } from "react-icons/bi";
+import { Accordion, Card, Col, Row, useAccordionButton } from "react-bootstrap";
 import { Draggable, Droppable } from "react-drag-and-drop";
+
+function CustomToggle({ children, eventKey }) {
+  const decoratedOnClick = useAccordionButton(eventKey, () =>
+    console.log("totally custom!", eventKey)
+  );
+
+  return (
+    <div
+      type="button"
+      onClick={decoratedOnClick}
+    >
+      {children}
+    </div>
+  );
+}
+
 function TaskContainer({
   title,
   id,
@@ -19,20 +35,21 @@ function TaskContainer({
   editText,
   setEditText,
   updateName,
-  deleteTask,setUpdateData
+  deleteTask,
+  setUpdateData,
 }) {
   // const onDrop = (data) => {
   //   console.log(data,title);
   // };
- const [ref,setRef] = useState(null)
-  useEffect(()=>{
-    ref?.focus()
-  },[editText])
-  
+  const [ref, setRef] = useState(null);
+  useEffect(() => {
+    ref?.focus();
+  }, [editText]);
+
   const editInput = (task) => {
     return (
       <textarea
-        ref={e=>editText=e}
+        ref={(e) => (editText = e)}
         value={editText}
         onChange={(e) => setEditText(e.target.value)}
         onKeyDown={(e) => {
@@ -62,69 +79,84 @@ function TaskContainer({
             tasks?.map((task) => (
               <Draggable type="task" data={JSON.stringify({ ...task })}>
                 <TaskCard>
-                  <Row>
-                    <Col md={10}>
-                      {edit === task._id ? editInput(task) : task.name}
-                    </Col>
-                    <Col md={2}>
-                      {edit === task._id ? (
-                       <div>
-                         <div className="d-flex justify-content-end">
+                  <Accordion >
+                    <Row>
+                      <Col md={10}>
+                        <CustomToggle eventKey={task._id}>
+                          {edit === task._id ? editInput(task) : task.name}
+                        </CustomToggle>
+                      </Col>
+                      <Col md={2}>
+                        {edit === task._id ? (
+                          <div>
+                            <div className="d-flex justify-content-end">
+                              <a
+                                onClick={() => {
+                                  //updateName(task);
+                                  setUpdateData(task);
+                                }}
+                                className={
+                                  "task-card_edit d-flex justify-content-end"
+                                }
+                                style={{
+                                  fontSize: "20px",
+                                  marginRight: "10px",
+                                }}
+                              >
+                                <BiEdit />
+                              </a>
+                              <a
+                                onClick={() => {
+                                  updateName(task);
+                                }}
+                                className={
+                                  "task-card_edit d-flex justify-content-end"
+                                }
+                                style={{ fontSize: "20px" }}
+                              >
+                                <BiCheck />
+                              </a>
+                            </div>
 
-                          <a
-                          onClick={() => {
-                            //updateName(task);
-                            setUpdateData(task)
-                          }}
-                          className={
-                            "task-card_edit d-flex justify-content-end"
-                          }
-                          style={{ fontSize: "20px",marginRight: '10px' }}
-                          >
-                          <BiEdit />
-                        </a>   
-                          <a
-                          onClick={() => {
-                            updateName(task);
-                          }}
-                          className={
-                            "task-card_edit d-flex justify-content-end"
-                          }
-                          style={{ fontSize: "20px" }}
-                          >
-                          <BiCheck />
-                        </a>   
+                            <a
+                              onClick={() => {
+                                deleteTask(task._id);
+                              }}
+                              className={
+                                "task-card_edit d-flex justify-content-end"
+                              }
+                              style={{ fontSize: "17px", marginTop: "10px" }}
+                            >
+                              <BsTrash />
+                            </a>
                           </div>
-                         
+                        ) : (
                           <a
-                          onClick={() => {
-                            deleteTask(task._id);
-                          }}
-                          className={
-                            "task-card_edit d-flex justify-content-end"
-                          }
-                          style={{ fontSize: "17px",marginTop: "10px" }}
-                        >
-                          <BsTrash />
-                        </a>   
-                        </div>
-                      ) : (
-                        <a
-                          onClick={() => {
-                            setEdit(task._id);
-                            setEditText(task.name);
-                            // textEdit?.focus();
-                           
-                          }}
-                          className={
-                            "task-card_edit d-flex justify-content-end"
-                          }
-                        >
-                          <HiOutlinePencil />
-                        </a>
-                      )}
-                    </Col>
-                  </Row>
+                            onClick={() => {
+                              setEdit(task._id);
+                              setEditText(task.name);
+                              // textEdit?.focus();
+                            }}
+                            className={
+                              "task-card_edit d-flex justify-content-end"
+                            }
+                          >
+                            <HiOutlinePencil />
+                          </a>
+                        )}
+                      </Col>
+                    </Row>
+                    <Row >
+                      <Accordion.Collapse eventKey={task._id}>
+                        <Card.Body style={{ 
+                              borderTop: "1px solid #443b3b38",
+                              fontSize: "14px",
+                              padding: "10px 2px",
+                              marginTop: "8px"
+                         }}>{task.description ?task.description : "No Description"}</Card.Body>
+                      </Accordion.Collapse>
+                    </Row>
+                  </Accordion>
                 </TaskCard>
               </Draggable>
             ))}
@@ -139,25 +171,25 @@ function TaskContainer({
                 </Col>
               </Row>
             </TaskCard>
-          </Draggable>
-          <Draggable type="task" data={`${title}_2`}>
+            </Draggable>
+            <Draggable type="task" data={`${title}_2`}>
             <TaskCard>
               <Row>
-                <Col md={10}>lorea ae rae aer esfasjfsdoaf sdf</Col>
-                <Col md={2}>
-                  <a className={"task-card_edit"}>
-                    <HiOutlinePencil />
-                  </a>
-                </Col>
+              <Col md={10}>lorea ae rae aer esfasjfsdoaf sdf</Col>
+              <Col md={2}>
+              <a className={"task-card_edit"}>
+              <HiOutlinePencil />
+              </a>
+              </Col>
               </Row>
             </TaskCard>
           </Draggable>{" "}
           <Draggable type="task" data={`${title}_3`}>
             <AddTask>
-              <a>
+            <a>
                 <AiOutlinePlus />
-              </a>{" "}
-              <span>Add Quest</span>
+                </a>{" "}
+                <span>Add Quest</span>
             </AddTask>
           </Draggable> */}
           <AddTask onClick={addTab}>
