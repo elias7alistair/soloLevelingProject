@@ -14,7 +14,7 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
   const [difficulty, setDifficulty] = useState();
   const [priority, setPriority] = useState();
   const [associatedWith, setAssociatedWith] = useState();
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState("0");
   const [description, setDescription] = useState();
   const [errors, setErrors] = useState(false);
   
@@ -39,7 +39,7 @@ function AddTaskModal({ close, addTab, options, goals, data ,setUpdateData,setEd
       setPriority();
      setAssociatedWith();
      setDescription()
-     setStatus(0)
+     setStatus("0")
     }
   }, [data]);
 
