@@ -16,7 +16,7 @@ import {
   updateTaskDetails,
 } from "./MainPage.slice";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import TaskContainer from "../../components/TaskContainer";
 import { ToggleButton } from "../Input/LoginPage";
 import AddTaskModal from "../../components/AddTask/AddTaskModal";
@@ -139,8 +139,13 @@ const MainPage = ({ history }) => {
   return (
     <Row className="m-2">
       <Col md={12} lg={8}>
-        <MainHud />
-        <div className="d-flex justify-content-between">
+        <MainHud  />
+        <div css={`
+        @media(max-width:767px){
+
+          flex-direction: column;
+        }
+        `} className="d-flex justify-content-between">
           <div>
             {!Recommend && (
               <>
@@ -361,6 +366,7 @@ const MainPage = ({ history }) => {
 export default MainPage;
 
 const MainBody = styled.div`
+overflow-x: scroll;
   & .h3header {
     width: 100%;
     text-align: center;

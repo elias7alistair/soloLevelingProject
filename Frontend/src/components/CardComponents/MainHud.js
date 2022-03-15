@@ -1,11 +1,15 @@
 import React from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import styled from 'styled-components/macro'
 const MainHud = () => {
   const { userInfo: {name} } = useSelector((state) => state.input);
 
   return (
-    <Card className="hud">
+    <Card className="hud" css={`
+    @media(max-width:767px){
+      display:none;
+    }`}>
       <div className="hud__body">
         <Row>
           <Col className="hud__username" md={3}>

@@ -205,6 +205,10 @@ border-radius: ${first ? "4px 0 0 4px" : "0 4px 4px 0"};
 width: 200px;
 font-weight: 500;
 outline: none !important;
+@media(max-width:767px){
+  width: 50%;
+  margin-bottom:12px
+}
 `}
 `;
 const Header = styled.h2`
