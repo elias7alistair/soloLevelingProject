@@ -259,4 +259,5 @@ const Container = styled.div`
   padding: 10px;
   margin: 10px;
   width: ${({ width }) => (width ? "97%" : "280px")};
+  
 `;

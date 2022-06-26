@@ -26,6 +26,7 @@ const containers = [
   { label: "To Do", id: "0" },
   { label: "In Progress", id: "1" },
   { label: "Completed", id: "2" },
+  { label: "Highlight", id: "3" },
 ];
 
 const priority = [
@@ -215,12 +216,13 @@ const MainPage = ({ history }) => {
         ) : (
           <MainBody className="d-flex flex-column">
             {toggle === 0 ? (
-              <div className="d-flex flex-row">
-                {containers.map(({ label, id }) => (
+              <div className="d-flex flex-wrap">
+                {containers.map(({ label, id },i) => (
                   <TaskContainer
                     setUpdateData={setUpdateData}
                     onDrop={onDrop}
                     tasks={sortedTasks[id]}
+                    width={i===3 ? "100%" : "33%"}
                     title={label}
                     id={id}
                     deleteTask={handleDelete}
