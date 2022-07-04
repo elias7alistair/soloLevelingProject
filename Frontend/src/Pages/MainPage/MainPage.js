@@ -26,7 +26,7 @@ const containers = [
   { label: "To Do", id: "0" },
   { label: "In Progress", id: "1" },
   { label: "Completed", id: "2" },
-  { label: "Highlight", id: "3" },
+ // { label: "Highlight", id: "3" },
 ];
 
 const priority = [
@@ -216,13 +216,15 @@ const MainPage = ({ history }) => {
         ) : (
           <MainBody className="d-flex flex-column">
             {toggle === 0 ? (
-              <div className="d-flex flex-wrap">
+              <>
+             
+              <div className="d-flex">
                 {containers.map(({ label, id },i) => (
                   <TaskContainer
                     setUpdateData={setUpdateData}
                     onDrop={onDrop}
                     tasks={sortedTasks[id]}
-                    width={i===3 ? "100%" : "33%"}
+                   // width={i===3 ? "100%" : "33%"}
                     title={label}
                     id={id}
                     deleteTask={handleDelete}
@@ -234,7 +236,26 @@ const MainPage = ({ history }) => {
                     addTab={() => setAddTab(true)}
                   />
                 ))}
+                 
               </div>
+              <div className="d-flex w-100">
+              <TaskContainer
+                    setUpdateData={setUpdateData}
+                    onDrop={onDrop}
+                    tasks={sortedTasks["3"]}
+                    width={"97%"}
+                    title={"Highlight"}
+                    id={"3"}
+                    deleteTask={handleDelete}
+                    edit={edit}
+                    setEdit={setEdit}
+                    editText={editText}
+                    setEditText={setEditText}
+                    updateName={updateName}
+                    addTab={() => setAddTab(true)}
+                  />
+              </div>
+              </>
             ) : (
               <div className="d-flex flex-wrap flex-row justify-content-between">
                 {" "}
