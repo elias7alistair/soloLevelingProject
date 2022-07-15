@@ -28,6 +28,12 @@ const containers = [
   { label: "Completed", id: "2" },
  // { label: "Highlight", id: "3" },
 ];
+const containersOptions = [
+  { label: "To Do", id: "0" },
+  { label: "In Progress", id: "1" },
+  { label: "Completed", id: "2" },
+  { label: "Highlight", id: "3" },
+];
 
 const priority = [
   { label: "urgent/important", id: "0" },
@@ -291,7 +297,7 @@ const MainPage = ({ history }) => {
         setEdit={setEdit}
         goals={goals}
         data={updateData}
-        statusOptions={containers}
+        statusOptions={containersOptions}
         setUpdateData={setUpdateData}
       />
       <AddGoalsModal
