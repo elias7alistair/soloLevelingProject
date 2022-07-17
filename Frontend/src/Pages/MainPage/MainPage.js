@@ -55,6 +55,12 @@ const MainPage = ({ history }) => {
     2: [],
     3: [],
   });
+  const [ogSortedTasks, setOgSortedTasks] = useState({
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+  });
   const [toggle, setToggle] = useState(0);
   const [updateData, setUpdateData] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -100,6 +106,20 @@ const MainPage = ({ history }) => {
       });
     setSortedTasks(tempSortedTasks);
   }, [tasks, toggle, currentGoal]);
+  useEffect(() => {
+    const tempSortedTasks = { 0: [], 1: [], 2: [], 3: [] };
+    tasks.length &&
+      tasks.forEach((task) => {
+        const { status, priority, associatedWith } = task;
+        console.log(status);
+        (associatedWith === currentGoal || currentGoal === 'Unassigned' && !associatedWith || currentGoal === "all" ) &&
+          ((status !== "2" && toggle === 1) || toggle === 0) &&
+          tempSortedTasks?.[toggle === 0 ? `${status}` : `${priority}`]?.push(
+            task
+          );
+      });
+    setOgSortedTasks(tempSortedTasks);
+  }, [tasks]);
 
   useEffect(() => {
     if (!userInfo) {
@@ -145,7 +165,7 @@ const MainPage = ({ history }) => {
   return (
     <Row className="m-2">
       <Col md={12} lg={8}>
-        <MainHud  tasks={sortedTasks['2']} />
+        <MainHud  tasks={ogSortedTasks['2']} />
         <div css={`
         @media(max-width:767px){
 
