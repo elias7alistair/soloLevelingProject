@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import styled from 'styled-components/macro'
-const MainHud = () => {
+const MainHud = ({tasks}) => {
+  const [levels,setLevel] = useState({
+    level:'0',
+    exp: '0'
+  });
   const { userInfo: {name} } = useSelector((state) => state.input);
+  
+  useEffect(()=>{
+
+    let level = (tasks.length *25 / 100).toString().split('.')[0];
+    let exp = (tasks.length *25  / 100).toFixed(2).toString().split('.')[1];
+    setLevel({
+      level,
+      exp
+    })
+  },[tasks])
 
   return (
     <Card className="hud" css={`
@@ -15,16 +29,16 @@ const MainHud = () => {
           <Col className="hud__username" md={3}>
          {name}
           </Col>
-          <Col className="hud__levelTab" md={8}>
-            Lvl <span className="hud__level">25</span>
+          <Col className="hud__levelTab" md={9}>
+            Lvl <span className="hud__level">{levels.level}</span>
           </Col>
         </Row>
         <Row>
-          <Col md={4}> Current exp</Col>
-          <Col md={8}>
+          <Col md={3}> Current exp</Col>
+          <Col md={9}>
             <div className="hud__progressBar">
-              <div className="hud__progress">
-                <span className="hud__progressText">25/100</span>
+              <div className="hud__progress" style={{width: levels.exp+"%"}}>
+                <span className="hud__progressText">{levels.exp}/100</span>
               </div>
             </div>
           </Col>

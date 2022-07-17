@@ -99,7 +99,6 @@ const MainPage = ({ history }) => {
           );
       });
     setSortedTasks(tempSortedTasks);
-    console.log("tempSorted task,", tempSortedTasks);
   }, [tasks, toggle, currentGoal]);
 
   useEffect(() => {
@@ -146,7 +145,7 @@ const MainPage = ({ history }) => {
   return (
     <Row className="m-2">
       <Col md={12} lg={8}>
-        <MainHud  />
+        <MainHud  tasks={sortedTasks['2']} />
         <div css={`
         @media(max-width:767px){
 
